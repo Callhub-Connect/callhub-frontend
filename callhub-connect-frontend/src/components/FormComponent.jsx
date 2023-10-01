@@ -1,41 +1,27 @@
 import React, { Component } from 'react';
 
 class FormComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-    };
-  }
-
-  handleInputChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  }
 
   handleSubmit = (e) => {
     e.preventDefault();
+    console.log("running")
     // Handle the form submission here
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    
+    fetch("http://127.0.0.1:8000/createuser", requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
     console.log(this.state);
   }
 
   render() {
     return (
       <div>
-        <h2>Sample Form</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <button type="Create User">Submit</button>
-        </form>
+        <button onClick={this.handleSubmit}>Create a User</button>
       </div>
     );
   }
