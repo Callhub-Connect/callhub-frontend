@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
 
-class FormComponent extends Component {
+class ButtonComponent extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -20,11 +21,15 @@ class FormComponent extends Component {
 
   render() {
     return (
-      <div>
-        <button onClick={this.handleSubmit}>Create a User</button>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }}>
+        <button type="button" class="btn btn-success" onClick={this.handleSubmit}>Create a User</button>
       </div>
     );
   }
 }
 
-export default FormComponent;
+export default ButtonComponent;

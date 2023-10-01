@@ -1,10 +1,15 @@
 import React from 'react';
-import FormComponent from './components/FormComponent';
+import ButtonComponent from './components/ButtonComponent';
 
 function App() {
   return (
-    <div>
-      <FormComponent />
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 700,
+    }}>
+        <ButtonComponent />
     </div>
   );
 }
