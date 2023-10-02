@@ -13,9 +13,21 @@ class ButtonComponent extends Component {
     };
     
     fetch("http://127.0.0.1:8000/createuser", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
+      .then(async response => {
+        // check if reponse successful
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const id = await response.text()
+
+        alert(`A user was created successfully with ID: ${id}.`);
+      })
+      .then(result => {
+        console.log(result)
+      })
+      .catch(error => {
+        console.log('error', error)
+      });
     console.log(this.state);
   }
 
@@ -26,7 +38,7 @@ class ButtonComponent extends Component {
         alignItems: 'center',
         justifyContent: 'center',
     }}>
-        <button type="button" class="btn btn-success" onClick={this.handleSubmit}>Create a User</button>
+        <button type="button" class="btn btn-primary btn-lg" onClick={this.handleSubmit}>Create a User</button>
       </div>
     );
   }
