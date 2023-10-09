@@ -1,2 +1,2 @@
-# CallHub-Connect-Frontend
-This is the frontend for CallHub Connect.
+# Callhub-Connect-Frontend
+This is the frontend for Callhub Connect.
