@@ -12,7 +12,7 @@ class ButtonComponent extends Component {
       redirect: 'follow'
     };
     
-    fetch("http://127.0.0.1:8000/createuser", requestOptions)
+    fetch("https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/mongotest", requestOptions)
       .then(async response => {
         // check if reponse successful
         if (!response.ok) {
