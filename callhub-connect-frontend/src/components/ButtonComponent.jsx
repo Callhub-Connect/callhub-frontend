@@ -38,7 +38,7 @@ class ButtonComponent extends Component {
         alignItems: 'center',
         justifyContent: 'center',
     }}>
-        <button type="button" class="btn btn-primary btn-lg" onClick={this.handleSubmit}>Create a Message</button>
+        <button type="button" class="btn btn-success btn-lg" onClick={this.handleSubmit}>Create a Message</button>
       </div>
     );
   }
