@@ -20,7 +20,7 @@ class ButtonComponent extends Component {
         }
         const id = await response.text()
 
-        alert(`A user was created successfully with ID: ${id}.`);
+        alert(`A message was stored successfully with ID: ${id}.`);
       })
       .then(result => {
         console.log(result)
@@ -38,7 +38,7 @@ class ButtonComponent extends Component {
         alignItems: 'center',
         justifyContent: 'center',
     }}>
-        <button type="button" class="btn btn-primary btn-lg" onClick={this.handleSubmit}>Create a User</button>
+        <button type="button" class="btn btn-primary btn-lg" onClick={this.handleSubmit}>Create a Message</button>
       </div>
     );
   }
