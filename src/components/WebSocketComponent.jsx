@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import io from 'socket.io-client';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
 const WebSocketComponent = () => {
   function connect() {
