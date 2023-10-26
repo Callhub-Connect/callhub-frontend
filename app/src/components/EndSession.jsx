@@ -9,8 +9,8 @@ const Container = styled.div`
 `;
 
 const Logo = styled.img`
-    height: 420px;
-    width: 1520px;
+    height: 270px;
+    width: 550px;
 `;
 
 const CodeContainer = styled.div`
