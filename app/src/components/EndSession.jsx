@@ -17,39 +17,36 @@ const CodeContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     position: relative;
-    gap: 10px;
     padding: 30px 0px 30px 30px;
-    height: 250px;
-    width: 1078px;
+    height: 200px;
+    width: 850px;
     background-color: #f8f8f8b2;
     border-radius: 50px;
     box-shadow: 0px 4px 10px #00000040;
 `;
 
 const Text = styled.h3`
-    height: 30px;
+    height: 25px;
     width: 724px;
     color: #000000;
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 400;
     line-height: normal;
-    padding-left: 60px;
+    text-align: center;
     position: relative;
 `;
 
 const Button = styled.button`
-    height: 65px;
-    width: 920px;
+    height: 55px;
+    width: 60%;
     background-color: #0b9f43;
     border-radius: 30px 30px 30px 30px;
     position: relative;
     color: white;
     font-family: 'League Spartan', sans-serif;
     font-size: x-large;
-    border: 3px solid;
-    border-color: #badcb4;
+    border: 0px solid;
     cursor: pointer;
     &:hover {
         background-color: #076a2d;

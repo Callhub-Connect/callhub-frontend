@@ -54,8 +54,7 @@ const InputSection = styled.div`
 
 const Input = styled.input`
     border-radius: 30px 0px 0px 30px;
-    border: 3px solid;
-    border-color: #badcb4;
+    border: 0px solid;
     display: flex;
     position: relative;
     width: 80%;
@@ -71,7 +70,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-    height: 60px;
+    height: 55px;
     width: 30%;
     font-family: 'League Spartan', sans-serif;
     background-color: #0b9f43;
@@ -79,8 +78,7 @@ const Button = styled.button`
     position: relative;
     color: white;
     font-size: x-large;
-    border: 3px solid;
-    border-color: #badcb4;
+    border: 0px solid;
     cursor: pointer;
     &:hover {
         background-color: #076a2d;

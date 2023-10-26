@@ -1,5 +1,6 @@
 import React from 'react';
 import EnterCode from './components/EnterCode';
+import EndSession from './components/EndSession';
 import { createGlobalStyle } from 'styled-components';
 import styled from 'styled-components';
 
@@ -22,7 +23,7 @@ function App() {
   return (
     <Container>
       <GlobalStyle />
-      <EnterCode />
+      <EndSession />
     </Container>
   );
 }
