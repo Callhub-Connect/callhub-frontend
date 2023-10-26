@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const Container = styled.div`
     height: 100vh;
@@ -9,12 +9,15 @@ const Container = styled.div`
 `;
 
 const Logo = styled.img`
-    height: 240px;
-    width: 760px;
+    height: 420px;
+    width: 1520px;
 `;
 
 const CodeContainer = styled.div`
+    display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
     gap: 10px;
     padding: 30px 0px 30px 30px;
@@ -29,49 +32,21 @@ const Text = styled.h3`
     height: 30px;
     width: 724px;
     color: #000000;
-    font-family: Helvetica;
     font-size: 48px;
     font-weight: 400;
     line-height: normal;
-    position: fixed;
     padding-left: 60px;
     position: relative;
-`;
-
-const InputSection = styled.div`
-    position: relative;
-    height: 75px;
-    width: 920px;
-    display: flex;
-    flex-direction: row;
-    padding-left: 60px;
-    text-align: center;
-`;
-
-const Input = styled.input`
-    border-radius: 30px 0px 0px 30px;
-    border: 3px solid;
-    border-color: #badcb4;
-    display: flex;
-    position: relative;
-    width: 80%;
-    height: 38px;
-    padding: 10px 16px;
-    line-height: 20px;
-    font-size: x-large;
-    ::placeholder {
-        color: #5e5e5ec4;
-        font-size: 20px;
-    }
 `;
 
 const Button = styled.button`
     height: 65px;
-    width: 30%;
+    width: 920px;
     background-color: #0b9f43;
-    border-radius: 0px 30px 30px 0px;
+    border-radius: 30px 30px 30px 30px;
     position: relative;
     color: white;
+    font-family: 'League Spartan', sans-serif;
     font-size: x-large;
     border: 3px solid;
     border-color: #badcb4;
@@ -84,16 +59,13 @@ const Button = styled.button`
 function EndSession() {
     return(
         <Container>
-            <Logo src="./img/callhubLogo.png" alt="Callhub Logo" />
+            <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
-                <Text>Enter your session code</Text>
-                <InputSection>
-                    <Input placeholder="ex. abcd123"/>
-                    <Button>Connect</Button>
-                </InputSection>
+                <Text>Your session has now ended.</Text>
+                <Button>Get Email Transcript</Button>
             </CodeContainer>
         </Container>
     );
 }
 
-export default EndSession;
+export default EndSession
