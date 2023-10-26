@@ -23,7 +23,7 @@ function App() {
   return (
     <Container>
       <GlobalStyle />
-      <EndSession />
+      <EnterCode />
     </Container>
   );
 }
