@@ -9,8 +9,8 @@ const Container = styled.div`
 `;
 
 const Logo = styled.img`
-    height: 240px;
-    width: 760px;
+    height: 270px;
+    width: 550px;
 `;
 
 const CodeContainer = styled.div`
@@ -19,33 +19,36 @@ const CodeContainer = styled.div`
     gap: 10px;
     padding: 30px 0px 30px 30px;
     position: relative;
-    height: 250px;
-    width: 1078px;
+    align-items: center;
+    height: 200px;
+    width: 850px;
     background-color: #f8f8f8b2;
     border-radius: 50px;
     box-shadow: 0px 4px 10px #00000040;
 `;
 
 const Text = styled.h3`
-    height: 30px;
-    width: 724px;
     color: #000000;
     font-family: Helvetica;
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 400;
     line-height: normal;
     position: fixed;
-    padding-left: 60px;
+    padding-left: 55px;
     position: relative;
+    height: 24px;
+    width: 724px;
+    font-family: 'League Spartan', sans-serif;
 `;
 
 const InputSection = styled.div`
     position: relative;
-    height: 75px;
-    width: 920px;
+    height: 70px;
+    width: 724px;
+    position: relative;
     display: flex;
     flex-direction: row;
-    padding-left: 60px;
+    padding-left: 55px;
     text-align: center;
 `;
 
@@ -57,18 +60,20 @@ const Input = styled.input`
     position: relative;
     width: 80%;
     height: 38px;
-    padding: 10px 16px;
+    padding: 8px 16px;
     line-height: 20px;
     font-size: x-large;
+    font-family: 'League Spartan', sans-serif;
     ::placeholder {
         color: #5e5e5ec4;
-        font-size: 20px;
+        font-size: 18px;
     }
 `;
 
 const Button = styled.button`
-    height: 65px;
+    height: 60px;
     width: 30%;
+    font-family: 'League Spartan', sans-serif;
     background-color: #0b9f43;
     border-radius: 0px 30px 30px 0px;
     position: relative;
@@ -85,7 +90,7 @@ const Button = styled.button`
 function EnterCode() {
     return(
         <Container>
-            <Logo src="./img/callhubLogo.png" alt="Callhub Logo" />
+            <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
                 <Text>Enter your session code</Text>
                 <InputSection>
