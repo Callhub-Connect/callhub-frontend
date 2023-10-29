@@ -6,25 +6,45 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @media (max-width: 768px) {
+        /* Add styles for smaller screens here */
+        /* For example, reduce the font size or change the container width */
+        font-size: 16px;
+        width: 100%;
+    }
 `;
 
 const Logo = styled.img`
     height: 270px;
     width: 550px;
+
+    @media (max-width: 768px) {
+        /* Add styles for smaller screens here */
+        /* For example, reduce the image size */
+        height: 200px;
+        width: 400px;
+    }
 `;
 
 const CodeContainer = styled.div`
+align-items: center;
+    display: flex;
     flex-direction: column;
-    position: relative;
     gap: 10px;
-    padding: 30px 0px 30px 30px;
-    position: relative;
-    align-items: center;
+    padding: 30px;
     height: 200px;
     width: 850px;
     background-color: #f8f8f8b2;
     border-radius: 50px;
     box-shadow: 0px 4px 10px #00000040;
+
+    @media (max-width: 768px) {
+        /* Add styles for smaller screens here */
+        /* For example, reduce the width or remove padding */
+        width: 90%;
+        padding: 10px;
+    }
 `;
 
 const Text = styled.h3`
@@ -33,30 +53,38 @@ const Text = styled.h3`
     font-size: 40px;
     font-weight: 400;
     line-height: normal;
-    position: fixed;
-    padding-left: 55px;
-    position: relative;
     height: 24px;
     width: 724px;
     font-family: 'League Spartan', sans-serif;
+
+    @media (max-width: 768px) {
+        /* Add styles for smaller screens here */
+        /* For example, reduce the font size or width */
+        width: 90%;
+        font-size: 26px;
+        text-align: center;
+    }
 `;
 
 const InputSection = styled.div`
-    position: relative;
     height: 70px;
     width: 724px;
-    position: relative;
     display: flex;
     flex-direction: row;
-    padding-left: 55px;
-    text-align: center;
+
+    @media (max-width: 768px) {
+        /* Add styles for smaller screens here */
+        /* For example, reduce the width or change the flex-direction */
+        width: 90%;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
 `;
 
 const Input = styled.input`
     border-radius: 30px 0px 0px 30px;
     border: 0px solid;
-    display: flex;
-    position: relative;
     width: 80%;
     height: 38px;
     padding: 8px 16px;
@@ -66,6 +94,14 @@ const Input = styled.input`
     ::placeholder {
         color: #5e5e5ec4;
         font-size: 18px;
+    }
+
+    @media (max-width: 768px) {
+        /* Add styles for smaller screens here */
+        /* For example, change the width or padding */
+        padding: 10px;
+        border-radius: 30px;
+        text-align: center;
     }
 `;
 
@@ -83,16 +119,24 @@ const Button = styled.button`
     &:hover {
         background-color: #076a2d;
     }
+
+    @media (max-width: 768px) {
+        /* Add styles for smaller screens here */
+        /* For example, change the width or font-size */
+        font-size: 20px;
+        padding: 10px;
+        border-radius: 30px;
+    }
 `
 
 function EnterCode() {
-    return(
+    return (
         <Container>
             <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
                 <Text>Enter your session code</Text>
                 <InputSection>
-                    <Input placeholder="ex. abcd123"/>
+                    <Input placeholder="ex. abcd123" />
                     <Button>Connect</Button>
                 </InputSection>
             </CodeContainer>
