@@ -9,22 +9,12 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'League Spartan', sans-serif;
   }`
 
-const Container = styled.div`
-  background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
-  background-size: contain;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
-
 function App() {
   return (
-    <Container>
+    <div>
       <GlobalStyle />
       <EnterCode />
-    </Container>
+    </div>
   );
 }
 
