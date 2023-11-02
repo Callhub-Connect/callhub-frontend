@@ -32,7 +32,7 @@ const Right = styled.div`
     flex: 1.5;
     display: flex;
     flex-direction: column;
-    background-image: linear-gradient(115deg, #41b147be 0.23%, #81c740c4 92.92%);
+    background-image: linear-gradient(115deg, #41b147d5 0.23%, #81c740d4 92.92%);
 `;
 
 const Logo = styled.img`
