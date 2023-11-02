@@ -129,7 +129,7 @@ const Button = styled.button`
         padding: 10px;
         border-radius: 30px;
     }
-`
+`;
 
 function EnterCode() {
     return (
