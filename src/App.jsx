@@ -1,7 +1,6 @@
 import React from 'react';
 import EnterCode from './components/EnterCode';
 import EndSession from './components/EndSession';
-import WebsocketButton from './components/WebSocketTestButton';
 import { createGlobalStyle } from 'styled-components';
 import styled from 'styled-components';
 
