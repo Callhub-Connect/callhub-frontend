@@ -18,27 +18,28 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <>
-      <Router>
-        <Routes>
-            <Route
-                exact
-                path="/"
-                element={<EnterCode />}
-            />
-            <Route
-                path="/session"
-                element={<Chat />}
-            />
-            <Route
-                path="/end"
-                element={<EndSession />}
-            />
-            <Route
-                path="*"
-                element={<Navigate to="/" />}
-            />
-        </Routes>
-      </Router>
+        <GlobalStyle />
+        <Router>
+            <Routes>
+                <Route
+                    exact
+                    path="/"
+                    element={<EnterCode />}
+                />
+                <Route
+                    path="/session"
+                    element={<Chat />}
+                />
+                <Route
+                    path="/end"
+                    element={<EndSession />}
+                />
+                <Route
+                    path="*"
+                    element={<Navigate to="/" />}
+                />
+            </Routes>
+        </Router>
     </>
   );
 }
