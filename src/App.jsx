@@ -24,7 +24,6 @@ function App() {
   return (
     <Container>
       <GlobalStyle />
-      <WebsocketButton/>
       <EnterCode />
     </Container>
   );
