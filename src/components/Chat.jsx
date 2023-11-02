@@ -85,7 +85,7 @@ const MessageInput = styled.input`
     }
 `;
 
-const ButtonInput = styled.button`
+const InputButton = styled.button`
     width: 15%;
     height: fit-content;
     padding: 8px 16px;
@@ -111,7 +111,7 @@ const MessageContainer = styled.div`
     flex-direction: column;
 `;
 
-const Messages = styled.div`
+const Message = styled.div`
     display: flex;
     flex-direction: column;
 `;
@@ -213,10 +213,10 @@ function Chat() {
         <Right>
           <MessageContainer>
             {messages.map((messageItem, index) => (
-              <Messages key={index}>
+              <Message key={index}>
                 <MessageBubble>{messageItem.message}</MessageBubble>
                 <Timestamp>{messageItem.timestamp}</Timestamp>
-              </Messages>
+              </Message>
             ))}
           </MessageContainer>
           <InputContainer>
@@ -227,7 +227,7 @@ function Chat() {
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
             />
-            <ButtonInput onClick={handleSendMessage}>Send</ButtonInput>
+            <InputButton onClick={handleSendMessage}>Send</InputButton>
             <UploadButton htmlFor="fileInput" />
           </InputContainer>
         </Right>
