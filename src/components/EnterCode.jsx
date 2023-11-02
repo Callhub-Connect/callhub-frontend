@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
@@ -132,6 +133,14 @@ const Button = styled.button`
 `;
 
 function EnterCode() {
+    let navigate = useNavigate(); 
+
+    // this is just for demo purposes, we're going to need to integrate this with specific session
+    const routeChange = () =>{ 
+        let path = `/session`; 
+        navigate(path);
+    }
+
     return (
         <Container>
             <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
@@ -139,7 +148,7 @@ function EnterCode() {
                 <Text>Enter your session code</Text>
                 <InputSection>
                     <Input placeholder="ex. abcd123" />
-                    <Button>Connect</Button>
+                    <Button onClick={routeChange}>Connect</Button>
                 </InputSection>
             </CodeContainer>
         </Container>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -192,11 +193,17 @@ function Chat() {
     }
   };
 
+  let navigate = useNavigate(); 
+  const routeChange = () =>{ 
+    let path = `/end`; 
+    navigate(path);
+  }
+
   return (
     <Container>
       <Header>
         <Logo src="./img/callhubLogo2.svg" alt="Callhub Logo" />
-        <Button>End Session</Button>
+        <Button onClick={routeChange}>End Session</Button>
       </Header>
       <DualContainer>
         <Left>
