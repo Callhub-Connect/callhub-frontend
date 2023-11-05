@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Axios from 'axios'; 
 
 const Container = styled.div`
     height: 100vh;
@@ -184,7 +185,21 @@ function Chat() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
-    setPdfVisible(true);
+    // Create a FormData object to send the file
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Send the file to the backend
+    Axios.post('http://localhost:8080/files/upload_network', formData)
+      .then((response) => {
+        // File uploaded successfully, you can set pdfVisible to true to display it
+        setPdfVisible(true);
+        console.log('File uploaded successfully:', response.data);
+      })
+      .catch((error) => {
+        // Handle any errors (e.g., show an error message)
+        console.error('File upload failed:', error);
+      });
   };
 
   const handleKeyPress = (e) => {
@@ -208,7 +223,11 @@ function Chat() {
       <DualContainer>
         <Left>
           <input type="file" accept=".pdf" onChange={handleFileChange} style={{ display: "none" }} id="fileInput" />
-          <PdfViewer src={selectedFile && URL.createObjectURL(selectedFile)} isVisible={pdfVisible} title="uploaded pdf" />
+          <PdfViewer 
+            src={selectedFile && URL.createObjectURL(selectedFile)} 
+            isVisible={pdfVisible} 
+            title="uploaded pdf" 
+          />
         </Left>
         <Right>
           <MessageContainer>
