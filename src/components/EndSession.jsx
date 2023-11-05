@@ -1,11 +1,13 @@
 import styled from 'styled-components'
 
 const Container = styled.div`
-    height: 100vh;
+    background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
+    background-size: contain;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100vh;
 `;
 
 const Logo = styled.img`
