@@ -39,21 +39,68 @@ const Text = styled.h3`
     position: relative;
 `;
 
+// const Button = styled.button`
+//     height: 55px;
+//     width: 60%;
+//     background-color: #0b9f43;
+//     border-radius: 30px 30px 30px 30px;
+//     position: relative;
+//     color: white;
+//     font-family: 'League Spartan', sans-serif;
+//     font-size: x-large;
+//     border: 0px solid;
+//     cursor: pointer;
+//     &:hover {
+//         background-color: #076a2d;
+//     }
+// `
+
+const InputSection = styled.div`
+    height: 70px;
+    width: 724px;
+    display: flex;
+    flex-direction: row;
+
+    @media (max-width: 768px) {
+        /* Add styles for smaller screens here */
+        /* For example, reduce the width or change the flex-direction */
+        width: 90%;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+`;
+
+const Input = styled.input`
+    border-radius: 30px 0px 0px 30px;
+    border: 0px solid;
+    width: 80%;
+    height: 38px;
+    padding: 8px 16px;
+    line-height: 20px;
+    font-size: x-large;
+    font-family: 'League Spartan', sans-serif;
+    ::placeholder {
+        color: #5e5e5ec4;
+        font-size: 18px;
+    }
+`;
+
 const Button = styled.button`
     height: 55px;
-    width: 60%;
+    width: 50%;
+    font-family: 'League Spartan', sans-serif;
     background-color: #0b9f43;
-    border-radius: 30px 30px 30px 30px;
+    border-radius: 0px 30px 30px 0px;
     position: relative;
     color: white;
-    font-family: 'League Spartan', sans-serif;
     font-size: x-large;
     border: 0px solid;
     cursor: pointer;
     &:hover {
         background-color: #076a2d;
     }
-`
+`;
 
 function EndSession() {
     return(
@@ -61,7 +108,11 @@ function EndSession() {
             <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
                 <Text>Your session has now ended.</Text>
-                <Button>Get Email Transcript</Button>
+                <InputSection>
+                    <Input placeholder="Email Address" />
+                    <Button>Get Email Transcript</Button>
+                </InputSection>
+                {/* <Button>Get Email Transcript</Button> */}
             </CodeContainer>
         </Container>
     );
