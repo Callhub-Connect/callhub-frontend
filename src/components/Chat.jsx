@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Axios from 'axios'; 
@@ -214,6 +214,15 @@ function Chat() {
     navigate(path);
   };
 
+  // Use useMemo to memoize the PDF viewer component
+  const pdfViewer = useMemo(() => (
+    <PdfViewer
+      src={selectedFile && URL.createObjectURL(selectedFile)}
+      isVisible={pdfVisible}
+      title="uploaded pdf"
+    />
+  ), [selectedFile, pdfVisible]);
+
   return (
     <Container>
       <Header>
@@ -223,11 +232,7 @@ function Chat() {
       <DualContainer>
         <Left>
           <input type="file" accept=".pdf" onChange={handleFileChange} style={{ display: "none" }} id="fileInput" />
-          <PdfViewer 
-            src={selectedFile && URL.createObjectURL(selectedFile)} 
-            isVisible={pdfVisible} 
-            title="uploaded pdf" 
-          />
+          {pdfViewer}
         </Left>
         <Right>
           <MessageContainer>
