@@ -197,7 +197,7 @@ function Chat() {
   const routeChange = () =>{ 
     let path = `/end`; 
     navigate(path);
-  }
+  };
 
   return (
     <Container>
@@ -225,7 +225,7 @@ function Chat() {
               placeholder="Type your message..."
               value={inputMessage}
               onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
             />
             <InputButton onClick={handleSendMessage}>Send</InputButton>
             <UploadButton htmlFor="fileInput" />
