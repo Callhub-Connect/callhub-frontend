@@ -165,7 +165,7 @@ function EnterCode() {
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
-          routeChange();
+          joinSession();
         }
       };
 
