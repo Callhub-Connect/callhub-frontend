@@ -141,13 +141,20 @@ function EnterCode() {
         navigate(path);
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+          routeChange();
+        }
+      };
+
     return (
         <Container>
             <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
                 <Text>Enter your session code</Text>
                 <InputSection>
-                    <Input placeholder="ex. abcd123" />
+                    <Input placeholder="ex. abcd123" 
+                        onKeyPress={handleKeyPress}/>
                     <Button onClick={routeChange}>Connect</Button>
                 </InputSection>
             </CodeContainer>

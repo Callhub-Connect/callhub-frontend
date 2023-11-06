@@ -1,6 +1,8 @@
 import React from 'react';
 import EnterCode from './components/EnterCode';
 import EndSession from './components/EndSession';
+import GenerateSession from './components/GenerateSession';
+import Welcome from './components/Welcome';
 import Chat from './components/Chat';
 import PdfFileManager from './components/PdfManager';
 import { createGlobalStyle } from 'styled-components';
@@ -25,6 +27,16 @@ function App() {
                 <Route
                     exact
                     path="/"
+                    element={<Welcome />}
+                />
+                <Route
+                    exact
+                    path="/generate"
+                    element={<GenerateSession />}
+                />
+                <Route
+                    exact
+                    path="/enter"
                     element={<EnterCode />}
                 />
                 <Route
