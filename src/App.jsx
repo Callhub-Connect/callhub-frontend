@@ -2,6 +2,7 @@ import React from 'react';
 import EnterCode from './components/EnterCode';
 import EndSession from './components/EndSession';
 import Chat from './components/Chat';
+import PdfFileManager from './components/PdfManager';
 import { createGlobalStyle } from 'styled-components';
 import {
     BrowserRouter as Router,
@@ -29,6 +30,10 @@ function App() {
                 <Route
                     path="/session"
                     element={<Chat />}
+                />
+                <Route
+                    path="/pdf"
+                    element={<PdfFileManager />}
                 />
                 <Route
                     path="/end"

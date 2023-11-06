@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Axios from 'axios'; 
+import PdfFileManager from "./PdfManager";
 
 const Container = styled.div`
     height: 100vh;
@@ -19,7 +19,7 @@ const Header = styled.div`
 `;
 
 const DualContainer = styled.div`
-    flex: 1;
+    height: 87%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -27,6 +27,11 @@ const DualContainer = styled.div`
 
 const Left = styled.div`
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-items: auto;
+    padding-left: 20px;
+    padding-right: 20px;
     background-color: #bbe4b2d6;
 `;
 
@@ -47,11 +52,11 @@ const Logo = styled.img`
     align-self: flex-start;
 `;
 
-const Button = styled.button`
+const EndButton = styled.button`
     font-family: 'League Spartan', sans-serif;
     background-color: #000000;
     border-radius: 30px;
-    padding: 10px 20px 10px 20px;
+    padding: 8px 16px;
     margin: auto;
     margin-right: 2%;
     color: white;
@@ -73,7 +78,7 @@ const InputContainer = styled.div`
 const MessageInput = styled.input`
     border-radius: 30px 0px 0px 30px;
     border: 0px solid;
-    width: 70%;
+    width: 80%;
     padding: 8px 16px;
     margin-bottom: 20px;
     margin-left: 20px;
@@ -90,6 +95,7 @@ const InputButton = styled.button`
     width: 15%;
     height: fit-content;
     padding: 8px 16px;
+    margin-right: 20px;
     font-family: 'League Spartan', sans-serif;
     background-color: black;
     border-radius: 0px 30px 30px 0px;
@@ -136,37 +142,9 @@ const Timestamp = styled.div`
     color: #666;
 `;
 
-const UploadButton = styled.label` 
-    font-family: 'League Spartan', sans-serif;
-    border-radius: 30px;
-    padding: 21px;
-    margin-right: 15px;
-    margin-left: 10px;
-    background: url(./img/upload.svg);
-    font-size: large;
-    height: fit-content;
-    margin-right: 15px;
-    cursor: pointer;
-    &:hover {
-        background-color: #ffffff;
-    }
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const PdfViewer = styled.iframe`
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: ${({ isVisible }) => (isVisible ? "block" : "none")};
-`;
-
 function Chat() {
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [pdfVisible, setPdfVisible] = useState(false);
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
@@ -182,26 +160,6 @@ function Chat() {
     setInputMessage("");
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedFile(file);
-    // Create a FormData object to send the file
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // Send the file to the backend
-    Axios.post('http://localhost:8080/files/upload_network', formData)
-      .then((response) => {
-        // File uploaded successfully, you can set pdfVisible to true to display it
-        setPdfVisible(true);
-        console.log('File uploaded successfully:', response.data);
-      })
-      .catch((error) => {
-        // Handle any errors (e.g., show an error message)
-        console.error('File upload failed:', error);
-      });
-  };
-
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSendMessage();
@@ -214,34 +172,39 @@ function Chat() {
     navigate(path);
   };
 
-  // Use useMemo to memoize the PDF viewer component
-  const pdfViewer = useMemo(() => (
-    <PdfViewer
-      src={selectedFile && URL.createObjectURL(selectedFile)}
-      isVisible={pdfVisible}
-      title="uploaded pdf"
-    />
-  ), [selectedFile, pdfVisible]);
+  // Create a ref to the MessageContainer element
+  const messageContainerRef = useRef();
+
+  // Function to keep the scroll at the bottom of the MessageContainer
+  const scrollToBottom = () => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    // Scroll to the bottom when messages change
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <Container>
       <Header>
         <Logo src="./img/callhubLogo2.svg" alt="Callhub Logo" />
-        <Button onClick={routeChange}>End Session</Button>
+        <EndButton onClick={routeChange}>End Session</EndButton>
       </Header>
       <DualContainer>
         <Left>
-          <input type="file" accept=".pdf" onChange={handleFileChange} style={{ display: "none" }} id="fileInput" />
-          {pdfViewer}
+          <PdfFileManager />
         </Left>
         <Right>
-          <MessageContainer>
-            {messages.map((messageItem, index) => (
-              <Message key={index}>
-                <MessageBubble>{messageItem.message}</MessageBubble>
-                <Timestamp>{messageItem.timestamp}</Timestamp>
-              </Message>
-            ))}
+          <MessageContainer ref={messageContainerRef}>
+              {messages.map((messageItem, index) => (
+                <Message key={index}>
+                  <MessageBubble>{messageItem.message}</MessageBubble>
+                  <Timestamp>{messageItem.timestamp}</Timestamp>
+                </Message>
+              ))}
           </MessageContainer>
           <InputContainer>
             <MessageInput
@@ -252,7 +215,6 @@ function Chat() {
               onKeyDown={handleKeyPress}
             />
             <InputButton onClick={handleSendMessage}>Send</InputButton>
-            <UploadButton htmlFor="fileInput" />
           </InputContainer>
         </Right>
       </DualContainer>
