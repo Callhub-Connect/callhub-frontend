@@ -118,9 +118,10 @@ const Message = styled.div`
 
 const MessageBubble = styled.div`
     align-self: flex-end;
+    align-items: left;
     background-color: #ffffff;
     padding: 8px;
-    border-radius: 10px;
+    border-radius: 30px 30px 0px 30px;
     margin-top: 10px;
     margin-right: 10px;
     max-width: 50%;
