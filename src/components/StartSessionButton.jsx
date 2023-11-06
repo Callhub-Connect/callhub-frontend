@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from 'axios'
+import axios from 'axios';
 
 class StartSessionButton extends Component {
 
@@ -20,7 +20,6 @@ class StartSessionButton extends Component {
       .catch(error => {
         console.log('error', error)
       });
-    console.log(this.state);
   }
 
   render() {
