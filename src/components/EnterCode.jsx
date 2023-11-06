@@ -1,5 +1,7 @@
 import styled from "styled-components";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const Container = styled.div`
     background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
@@ -133,13 +135,33 @@ const Button = styled.button`
 `;
 
 function EnterCode() {
-    let navigate = useNavigate(); 
+    let navigate = useNavigate();
+    const [sessionInput, setSessionInput] = useState("");
 
     // this is just for demo purposes, we're going to need to integrate this with specific session
-    const routeChange = () =>{ 
-        let path = `/session`; 
-        navigate(path);
+    const joinSession = () => {
+        let joinUrl = "http://localhost:8080/session/join/" + sessionInput;
+
+        axios.get(joinUrl)
+            .then(function (response) {
+                console.log(response);
+                let sessionCode = response.data.sessionCode;
+                sessionStorage.setItem('sessionCode', sessionCode);
+                let sessionId = response.data.sessionId;
+                sessionStorage.setItem('sessionId', sessionId);
+                console.log(sessionCode);
+                let path = `/session`; 
+                navigate(path);
+            })
+            .catch(error => {
+                console.log('error', error);
+                alert('Invalid code');
+            });
     }
+
+    const handleInputChange = (e) => {
+        setSessionInput(e.target.value);
+    };
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
@@ -154,8 +176,8 @@ function EnterCode() {
                 <Text>Enter your session code</Text>
                 <InputSection>
                     <Input placeholder="ex. abcd123" 
-                        onKeyPress={handleKeyPress}/>
-                    <Button onClick={routeChange}>Connect</Button>
+                        onKeyPress={handleKeyPress} onChange={handleInputChange}/>
+                    <Button onClick={joinSession}>Connect</Button>
                 </InputSection>
             </CodeContainer>
         </Container>

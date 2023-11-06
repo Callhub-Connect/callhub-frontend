@@ -1,6 +1,7 @@
 import React from 'react';
 import EnterCode from './components/EnterCode';
 import EndSession from './components/EndSession';
+import StartSessionButton from './components/StartSessionButton';
 import GenerateSession from './components/GenerateSession';
 import Welcome from './components/Welcome';
 import Chat from './components/Chat';
@@ -54,6 +55,10 @@ function App() {
                 <Route
                     path="*"
                     element={<Navigate to="/" />}
+                />
+                <Route
+                    path="/start-session"
+                    element={<StartSessionButton/>}
                 />
             </Routes>
         </Router>
