@@ -163,13 +163,20 @@ function EnterCode() {
         setSessionInput(e.target.value);
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+          routeChange();
+        }
+      };
+
     return (
         <Container>
             <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
                 <Text>Enter your session code</Text>
                 <InputSection>
-                    <Input onChange={handleInputChange} placeholder="ex. abcd123" />
+                    <Input placeholder="ex. abcd123" 
+                        onKeyPress={handleKeyPress} onChange={handleInputChange}/>
                     <Button onClick={joinSession}>Connect</Button>
                 </InputSection>
             </CodeContainer>
