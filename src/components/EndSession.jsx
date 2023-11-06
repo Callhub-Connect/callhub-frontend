@@ -76,7 +76,7 @@ const Input = styled.input`
     border: 0px solid;
     width: 80%;
     height: 38px;
-    padding: 8px 16px;
+    padding: 8px 24px;
     line-height: 20px;
     font-size: x-large;
     font-family: 'League Spartan', sans-serif;
@@ -118,4 +118,4 @@ function EndSession() {
     );
 }
 
-export default EndSession
+export default EndSession;

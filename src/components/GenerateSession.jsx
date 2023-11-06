@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
@@ -56,15 +57,23 @@ const Button = styled.button`
 `
 
 function GenerateSession() {
+    let navigate = useNavigate(); 
+
+    // this is just for demo purposes, we're going to need to integrate this with specific session
+    const routeChange = () =>{ 
+        let path = `/session`; 
+        navigate(path);
+    }
+
     return(
         <Container>
             <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
                 <Text>Employee Side</Text>
-                <Button>Generate Session</Button>
+                <Button onClick={routeChange}>Generate Session</Button>
             </CodeContainer>
         </Container>
     );
 }
 
-export default GenerateSession
+export default GenerateSession;

@@ -73,7 +73,7 @@ const MessageInput = styled.input`
     border-radius: 30px 0px 0px 30px;
     border: 0px solid;
     width: 70%;
-    padding: 8px 16px;
+    padding: 8px 18px;
     margin-bottom: 20px;
     margin-left: 20px;
     line-height: 20px;
@@ -118,9 +118,8 @@ const Message = styled.div`
 
 const MessageBubble = styled.div`
     align-self: flex-end;
-    align-items: left;
     background-color: #ffffff;
-    padding: 8px;
+    padding: 10px 14px;
     border-radius: 30px 30px 0px 30px;
     margin-top: 10px;
     margin-right: 10px;
