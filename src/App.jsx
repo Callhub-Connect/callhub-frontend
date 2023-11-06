@@ -1,6 +1,7 @@
 import React from 'react';
 import EnterCode from './components/EnterCode';
 import EndSession from './components/EndSession';
+import StartSessionButton from './components/StartSessionButton';
 import Chat from './components/Chat';
 import { createGlobalStyle } from 'styled-components';
 import {
@@ -37,6 +38,10 @@ function App() {
                 <Route
                     path="*"
                     element={<Navigate to="/" />}
+                />
+                <Route
+                    path="/start-session"
+                    element={<StartSessionButton/>}
                 />
             </Routes>
         </Router>
