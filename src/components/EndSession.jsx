@@ -37,6 +37,7 @@ const Text = styled.h3`
     line-height: normal;
     text-align: center;
     position: relative;
+    margin-bottom: 30px;
 `;
 
 // const Button = styled.button`
@@ -75,7 +76,7 @@ const Input = styled.input`
     border-radius: 30px 0px 0px 30px;
     border: 0px solid;
     width: 80%;
-    height: 38px;
+    height: 50px;
     padding: 8px 24px;
     line-height: 20px;
     font-size: x-large;
@@ -87,7 +88,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-    height: 55px;
+    height: 50px;
     width: 50%;
     font-family: 'League Spartan', sans-serif;
     background-color: #0b9f43;

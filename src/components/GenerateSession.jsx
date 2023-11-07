@@ -38,10 +38,11 @@ const Text = styled.h3`
     line-height: normal;
     text-align: center;
     position: relative;
+    margin-bottom: 30px;
 `;
 
 const Button = styled.button`
-    height: 55px;
+    height: 50px;
     width: 60%;
     background-color: #0b9f43;
     border-radius: 30px 30px 30px 30px;

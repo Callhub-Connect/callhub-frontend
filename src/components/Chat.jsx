@@ -79,6 +79,7 @@ const MessageInput = styled.input`
     border-radius: 30px 0px 0px 30px;
     border: 0px solid;
     width: 80%;
+    height: 50px;
     padding: 8px 16px;
     margin-bottom: 20px;
     margin-left: 20px;
@@ -93,7 +94,7 @@ const MessageInput = styled.input`
 
 const InputButton = styled.button`
     width: 15%;
-    height: fit-content;
+    height: 50px;
     padding: 8px 16px;
     margin-right: 20px;
     font-family: 'League Spartan', sans-serif;
