@@ -130,7 +130,7 @@ const MessageBubble = styled.div`
     border-radius: 30px 30px 0px 30px;
     margin-top: 10px;
     margin-right: 10px;
-    max-width: 50%;
+    max-width: 70%;
     font-size: x-large;
 `;
 
@@ -191,7 +191,7 @@ function Chat() {
     <Container>
       <Header>
         <Logo src="./img/callhubLogo2.svg" alt="Callhub Logo" />
-        <div style={{ display: "flex", gap: "25px", alignItems: "center", width: "21%"}}>
+        <div style={{ display: "flex", gap: "25px", alignItems: "center", width: "300px"}}>
           <h2>{sessionStorage.getItem("sessionCode")}</h2>
           <EndButton onClick={routeChange}>End Session</EndButton>
         </div>
