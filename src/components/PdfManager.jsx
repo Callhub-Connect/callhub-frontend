@@ -65,13 +65,9 @@ function PdfFileManager() {
   const pdfViewer = useMemo(() => {
     if (selectedPdf) {
       return (
-        // <PdfViewer>
-        //   <h4>Viewing: {selectedPdf.name}</h4>
-        //   <button onClick={closePdf}>Close PDF</button>
-        //   <PdfIframe src={URL.createObjectURL(selectedPdf)} title="Selected PDF"></PdfIframe>
-        // </PdfViewer>
         <PdfJSComponent
-        currentFile={selectedPdf}></PdfJSComponent>
+				document="http://localhost:8080/files/65487f2806b6975c352f86a8"
+			/>
       );
     } else {
       return null;
