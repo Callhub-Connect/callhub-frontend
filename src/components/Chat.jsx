@@ -173,6 +173,10 @@ function Chat() {
 
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
+    // Clear the messages when the session ends
+    setMessages([]);
+    sessionStorage.removeItem("chatMessages");
+    
     let path = `/end`; 
     navigate(path);
   };
