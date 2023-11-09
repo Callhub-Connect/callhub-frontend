@@ -143,8 +143,9 @@ const Timestamp = styled.div`
 `;
 
 function Chat() {
+  const storedMessages = JSON.parse(sessionStorage.getItem("chatMessages"));
   const [inputMessage, setInputMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(storedMessages || []);
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
@@ -155,8 +156,12 @@ function Chat() {
 
     const now = new Date();
     const timestamp = now.toLocaleTimeString();
+    const newMessage = { message: inputMessage, timestamp };
+    const newMessages = [...messages, newMessage];
+    
+    sessionStorage.setItem("chatMessages", JSON.stringify(newMessages));
 
-    setMessages([...messages, { message: inputMessage, timestamp }]);
+    setMessages(newMessages);
     setInputMessage("");
   };
 
