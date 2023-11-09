@@ -58,10 +58,9 @@ const EndButton = styled.button`
     border-radius: 30px;
     padding: 8px 16px;
     margin: auto;
-    margin-right: 2%;
+    margin-right: 8%;
     color: white;
     font-size: x-large;
-    height: fit-content;
     cursor: pointer;
     &:hover {
         background-color: #076a2d;
@@ -192,7 +191,10 @@ function Chat() {
     <Container>
       <Header>
         <Logo src="./img/callhubLogo2.svg" alt="Callhub Logo" />
-        <EndButton onClick={routeChange}>End Session</EndButton>
+        <div style={{ display: "flex", gap: "25px", alignItems: "center", width: "21%"}}>
+          <h2>{sessionStorage.getItem("sessionCode")}</h2>
+          <EndButton onClick={routeChange}>End Session</EndButton>
+        </div>
       </Header>
       <DualContainer>
         <Left>
