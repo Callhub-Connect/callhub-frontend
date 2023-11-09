@@ -46,6 +46,7 @@ function PdfFileManager() {
     // Create a FormData object to send the file
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("name", file.name);
 
     // Send the file to the backend
     Axios.post('http://localhost:8080/files/upload_network', formData)
