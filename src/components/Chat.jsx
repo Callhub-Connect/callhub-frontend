@@ -16,6 +16,7 @@ const Header = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 `;
 
 const DualContainer = styled.div`
@@ -47,8 +48,7 @@ const Logo = styled.img`
     height: 80%;
     width: auto;
     padding: 5px;
-    padding-left: 20px;
-    padding-top: 10px;
+    margin: 10px;
     align-self: flex-start;
 `;
 
@@ -191,7 +191,7 @@ function Chat() {
     <Container>
       <Header>
         <Logo src="./img/callhubLogo2.svg" alt="Callhub Logo" />
-        <div style={{ display: "flex", gap: "25px", alignItems: "center", width: "300px"}}>
+        <div style={{ display: "flex", gap: "20px", alignItems: "center", width: "330px"}}>
           <h2>{sessionStorage.getItem("sessionCode")}</h2>
           <EndButton onClick={routeChange}>End Session</EndButton>
         </div>
