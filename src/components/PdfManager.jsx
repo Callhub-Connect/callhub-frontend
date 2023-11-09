@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
+import PdfJSComponent from './PdfJSComponent';
+
 
 const FileManagerContainer = styled.div`
   display: flex;
@@ -48,31 +50,34 @@ function PdfFileManager() {
     formData.append("file", file);
 
     // Send the file to the backend
-    Axios.post('http://localhost:8080/files/upload_network', formData)
-      .then((response) => {
-        // File uploaded successfully
-        console.log('File uploaded successfully:', response.data);
-      })
-      .catch((error) => {
-        // Handle any errors (e.g., show an error message)
-        console.error('File upload failed:', error);
-      });
+    // Axios.post('http://localhost:8080/files/upload_network', formData)
+    //   .then((response) => {
+    //     // File uploaded successfully
+    //     console.log('File uploaded successfully:', response.data);
+    //   })
+    //   .catch((error) => {
+    //     // Handle any errors (e.g., show an error message)
+    //     console.error('File upload failed:', error);
+    //   });
   };
 
   // Memoized iframe element
   const pdfViewer = useMemo(() => {
     if (selectedPdf) {
       return (
-        <PdfViewer>
-          <h4>Viewing: {selectedPdf.name}</h4>
-          <button onClick={closePdf}>Close PDF</button>
-          <PdfIframe src={URL.createObjectURL(selectedPdf)} title="Selected PDF"></PdfIframe>
-        </PdfViewer>
+        // <PdfViewer>
+        //   <h4>Viewing: {selectedPdf.name}</h4>
+        //   <button onClick={closePdf}>Close PDF</button>
+        //   <PdfIframe src={URL.createObjectURL(selectedPdf)} title="Selected PDF"></PdfIframe>
+        // </PdfViewer>
+        <PdfJSComponent
+        currentFile={selectedPdf}></PdfJSComponent>
       );
     } else {
       return null;
     }
   }, [selectedPdf]);
+
 
   return (
     <FileManagerContainer>
