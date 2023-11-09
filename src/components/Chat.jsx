@@ -126,7 +126,7 @@ const Message = styled.div`
 const MessageBubble = styled.div`
     align-self: flex-end;
     background-color: #ffffff;
-    padding: 10px 14px;
+    padding: 0 10px 0 10px;
     border-radius: 30px 30px 0px 30px;
     margin-top: 10px;
     margin-right: 10px;
