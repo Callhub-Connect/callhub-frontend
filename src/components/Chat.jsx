@@ -27,6 +27,7 @@ const DualContainer = styled.div`
 
 const Left = styled.div`
     flex: 1;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     justify-items: auto;
@@ -36,7 +37,7 @@ const Left = styled.div`
 `;
 
 const Right = styled.div`
-    flex: 1.5;
+    flex: 1.25;
     display: flex;
     flex-direction: column;
     background-image: linear-gradient(115deg, #41b147d5 0.23%, #81c740d4 92.92%);
