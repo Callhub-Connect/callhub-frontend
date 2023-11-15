@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import PdfFileManager from "./PdfManager";
+import { sendMessageWebsocket, disconnectWebsocket } from "../websocket";
 
 const Container = styled.div`
     height: 100vh;
@@ -157,6 +158,10 @@ function Chat() {
     const now = new Date();
     const timestamp = now.toLocaleTimeString();
     const newMessage = { message: inputMessage, timestamp };
+
+    // send to websocket
+    sendMessageWebsocket(inputMessage)
+
     const newMessages = [...messages, newMessage];
     
     sessionStorage.setItem("chatMessages", JSON.stringify(newMessages));
@@ -176,6 +181,9 @@ function Chat() {
     // Clear the messages when the session ends
     setMessages([]);
     sessionStorage.removeItem("chatMessages");
+    sessionStorage.removeItem("sessionId")
+    sessionStorage.removeItem("sessionCode")
+    disconnectWebsocket();
     
     let path = `/end`; 
     navigate(path);

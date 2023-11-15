@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { connectWebsocket } from "../websocket";
 
 const Container = styled.div`
     background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
@@ -151,6 +152,7 @@ function EnterCode() {
                 let sessionId = response.data.sessionId;
                 sessionStorage.setItem('sessionId', sessionId);
                 console.log(sessionCode);
+                connectWebsocket('customer', sessionId);
                 let path = `/session`; 
                 navigate(path);
             })

@@ -2,6 +2,7 @@ import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import styled from 'styled-components';
+import { connectWebsocket } from '../websocket';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -33,6 +34,7 @@ function StartSessionButton() {
         sessionStorage.setItem('sessionCode', sessionCode);
         let sessionId = response.data.sessionId;
         sessionStorage.setItem('sessionId', sessionId);
+        connectWebsocket('employee', sessionId);
         console.log(sessionCode);
         let path = `/session`;
         navigate(path);
