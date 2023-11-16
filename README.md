@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Development Setup
+# Development Setup
 
 ### Prerequisites
 
@@ -27,10 +27,10 @@ npm run start-pc # for pc
 ```
 Visit http://localhost:3000 in your browser to view the app.
 
-## Production Setup
+# Production Setup
 Auto-deployment from GitHub is setup for Netlify at: https://callhub.netlify.app/
 
-## Available Scripts
+# Available Scripts
 
 In the project directory, you can run:
 
