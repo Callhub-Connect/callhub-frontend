@@ -137,7 +137,7 @@ const YourMessageBubble = styled.div`
 
 const IncomingMessageBubble = styled.div`
   align-self: flex-start;
-  background-color: #ffffff;
+  background-color: #FFFFFF99;
   padding: 4px 10px 0 10px;
   border-radius: 30px 30px 30px 0px;
   margin-top: 10px;
@@ -156,7 +156,7 @@ const YourTimestamp = styled.div`
 
 const IncomingTimestamp = styled.div`
     margin-top: 5px;
-    margin-right: 10px;
+    margin-left: 10px;
     text-align: left;
     font-size: 12px;
     color: #666;
