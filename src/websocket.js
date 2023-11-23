@@ -1,8 +1,6 @@
 import { Client } from "@stomp/stompjs";
 import websocket from "websocket";
-
-// Import the event emitter for handling messages in the Chat component
-import { EventEmitter } from "events";
+import Observable from './observable';
 
 Object.assign(global, { WebSocket: websocket.w3cwebsocket });
 
@@ -10,8 +8,8 @@ var client;
 var role;
 var sessionId;
 
-// Create an event emitter instance
-const messageEmitter = new EventEmitter();
+// Create an observable instance
+const messageObservable = new Observable();
 
 export function connectWebsocket(userRole, sessionID) {
   role = userRole;
@@ -21,8 +19,8 @@ export function connectWebsocket(userRole, sessionID) {
     brokerURL: "ws://localhost:8080/callhub",
     onConnect: () => {
       client.subscribe(`/topic/message-${role}/${sessionId}`, (message) => {
-        // Emit the message to be handled by the Chat component
-        messageEmitter.emit("message", message.body);
+        // Notify observers when a new message arrives
+        messageObservable.notifyObservers(message.body);
       });
 
       client.onWebSocketError = (error) => {
@@ -57,10 +55,10 @@ export function sendMessageWebsocket(message) {
 
 // Function to subscribe to WebSocket messages in the Chat component
 export function subscribeToMessages(callback) {
-  messageEmitter.on("message", callback);
+  messageObservable.addObserver(callback);
 }
 
 // Function to unsubscribe from WebSocket messages in the Chat component
 export function unsubscribeFromMessages(callback) {
-  messageEmitter.off("message", callback);
+  messageObservable.removeObserver(callback);
 }
