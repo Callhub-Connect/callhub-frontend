@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
+import PdfViewerComponent from './PdfViewerComponent';
 
 const FileManagerContainer = styled.div`
   display: flex;
@@ -13,6 +14,10 @@ const PdfContainer = styled.div`
   flex-direction: column;
   flex: 1;
 `;
+
+const divStyle = {
+  height: '80%',
+};
 
 const PdfViewer = styled.div`
   display: flex;
@@ -48,27 +53,28 @@ function PdfFileManager() {
     formData.append("file", file);
     formData.append("name", file.name);
 
-    // Send the file to the backend
-    Axios.post('http://localhost:8080/files/upload_network', formData)
-      .then((response) => {
-        // File uploaded successfully
-        console.log('File uploaded successfully:', response.data);
-      })
-      .catch((error) => {
-        // Handle any errors (e.g., show an error message)
-        console.error('File upload failed:', error);
-      });
+    // // Send the file to the backend
+    // Axios.post('http://localhost:8080/files/upload_network', formData)
+    //   .then((response) => {
+    //     // File uploaded successfully
+    //     console.log('File uploaded successfully:', response.data);
+    //   })
+    //   .catch((error) => {
+    //     // Handle any errors (e.g., show an error message)
+    //     console.error('File upload failed:', error);
+    //   });
   };
 
   // Memoized iframe element
   const pdfViewer = useMemo(() => {
     if (selectedPdf) {
       return (
-        <PdfViewer>
-          <h4>Viewing: {selectedPdf.name}</h4>
-          <button onClick={closePdf}>Close PDF</button>
-          <PdfIframe src={URL.createObjectURL(selectedPdf)} title="Selected PDF"></PdfIframe>
-        </PdfViewer>
+          <PdfViewerComponent document='http://localhost:8080/files/65602d4b48ee5a1e8cc528ea'/>
+        // <PdfViewer>
+        //   <h4>Viewing: {selectedPdf.name}</h4>
+          
+        //   <PdfIframe src={URL.createObjectURL(selectedPdf)} title="Selected PDF"></PdfIframe>
+        // </PdfViewer> 
       );
     } else {
       return null;
