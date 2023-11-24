@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import PdfFileManager from "./PdfManager";
-import { sendMessageWebsocket, disconnectWebsocket } from "../websocket";
+import { sendMessageWebsocket, disconnectWebsocket, subscribeToMessages, unsubscribeFromMessages} from "../websocket";
 
 const Container = styled.div`
     height: 100vh;
@@ -124,7 +124,7 @@ const Message = styled.div`
     flex-direction: column;
 `;
 
-const MessageBubble = styled.div`
+const YourMessageBubble = styled.div`
     align-self: flex-end;
     background-color: #ffffff;
     padding: 4px 10px 0 10px;
@@ -135,10 +135,29 @@ const MessageBubble = styled.div`
     font-size: x-large;
 `;
 
-const Timestamp = styled.div`
+const IncomingMessageBubble = styled.div`
+  align-self: flex-start;
+  background-color: #FFFFFF99;
+  padding: 4px 10px 0 10px;
+  border-radius: 30px 30px 30px 0px;
+  margin-top: 10px;
+  margin-left: 10px;
+  max-width: 70%;
+  font-size: x-large;
+`;
+
+const YourTimestamp = styled.div`
     margin-top: 5px;
     margin-right: 10px;
     text-align: right;
+    font-size: 12px;
+    color: #666;
+`;
+
+const IncomingTimestamp = styled.div`
+    margin-top: 5px;
+    margin-left: 10px;
+    text-align: left;
     font-size: 12px;
     color: #666;
 `;
@@ -157,7 +176,7 @@ function Chat() {
 
     const now = new Date();
     const timestamp = now.toLocaleTimeString();
-    const newMessage = { message: inputMessage, timestamp };
+    const newMessage = { message: inputMessage, timestamp, sentByYou: true };
 
     // send to websocket
     sendMessageWebsocket(inputMessage)
@@ -202,6 +221,30 @@ function Chat() {
   useEffect(() => {
     // Scroll to the bottom when messages change
     scrollToBottom();
+  
+    // Subscribe to incoming WebSocket messages
+    const handleIncomingMessage = (message) => {
+      const messageJSON = JSON.parse(message);
+      const now = new Date();
+      const timestamp = now.toLocaleTimeString();
+      const newMessage = {
+        message: messageJSON.message,
+        timestamp,
+        sentByYou: false, // Set to false for incoming messages
+      };
+      console.log(messageJSON.message);
+  
+      const newMessages = [...messages, newMessage];
+      sessionStorage.setItem("chatMessages", JSON.stringify(newMessages));
+      setMessages(newMessages);
+    };
+  
+    subscribeToMessages(handleIncomingMessage);
+  
+    // Unsubscribe when the component is unmounted
+    return () => {
+      unsubscribeFromMessages(handleIncomingMessage);
+    };
   }, [messages]);
 
   return (
@@ -218,14 +261,23 @@ function Chat() {
           <PdfFileManager />
         </Left>
         <Right>
-          <MessageContainer ref={messageContainerRef}>
-              {messages.map((messageItem, index) => (
-                <Message key={index}>
-                  <MessageBubble>{messageItem.message}</MessageBubble>
-                  <Timestamp>{messageItem.timestamp}</Timestamp>
-                </Message>
-              ))}
-          </MessageContainer>
+        <MessageContainer ref={messageContainerRef}>
+          {messages.map((messageItem, index) => (
+            <Message key={index}>
+              {messageItem.sentByYou ? (
+                <>
+                  <YourMessageBubble>{messageItem.message}</YourMessageBubble>
+                  <YourTimestamp>{messageItem.timestamp}</YourTimestamp>
+                </>
+              ) : (
+                <>
+                  <IncomingMessageBubble>{messageItem.message}</IncomingMessageBubble>
+                  <IncomingTimestamp>{messageItem.timestamp}</IncomingTimestamp>
+                </>
+              )}
+            </Message>
+          ))}
+        </MessageContainer>
           <InputContainer>
             <MessageInput
               type="text"
