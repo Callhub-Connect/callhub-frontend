@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import React, {useRef, useEffect } from "react";
+import styled from 'styled-components';
+import emailjs from '@emailjs/browser';
 
 const Container = styled.div`
     background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
@@ -104,16 +106,32 @@ const Button = styled.button`
 `;
 
 function EndSession() {
+    const emailRef = useRef();
+
+    useEffect(() => emailjs.init("OScF2lHq5ESl_o9lU"), []);
+    const sendEmail = async (e) => {
+        e.preventDefault();
+        const serviceId = "service_2ndgu8t";
+        const templateId = "template_feo851p";
+        try {
+          await emailjs.send(serviceId, templateId, {
+            recipient: emailRef.current.value,
+            message: "Hello"
+          });
+          alert("Email successfully sent. Check inbox.");
+        } catch (error) {
+          console.log(error);
+        }
+    };
     return(
         <Container>
             <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
                 <Text>Your session has now ended.</Text>
                 <InputSection>
-                    <Input placeholder="Email Address" />
-                    <Button>Get Email Transcript</Button>
+                    <Input placeholder="Email Address" ref={emailRef} />
+                    <Button onClick={sendEmail}>Get Email Transcript</Button>
                 </InputSection>
-                {/* <Button>Get Email Transcript</Button> */}
             </CodeContainer>
         </Container>
     );
