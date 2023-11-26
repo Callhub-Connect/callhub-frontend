@@ -29,6 +29,7 @@ function EnterCode() {
                 sessionStorage.setItem('sessionId', sessionId);
                 console.log(sessionCode);
                 connectWebsocket('customer', sessionId);
+                localStorage.setItem('isSessionActive', 'true');
                 let path = `/session`; 
                 navigate(path);
             })
