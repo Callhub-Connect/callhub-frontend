@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { connectWebsocket } from "../../websocket";
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import { 
     Container,
     Logo,
@@ -15,8 +17,8 @@ import {
 function EnterCode() {
     let navigate = useNavigate();
     const [sessionInput, setSessionInput] = useState("");
+    const [alertOpen, setAlertOpen] = useState(false);
 
-    // this is just for demo purposes, we're going to need to integrate this with specific session
     const joinSession = () => {
         let joinUrl = "http://localhost:8080/session/join/" + sessionInput;
 
@@ -35,7 +37,8 @@ function EnterCode() {
             })
             .catch(error => {
                 console.log('error', error);
-                alert('Invalid code');
+                setAlertOpen(true);
+                setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
             });
     }
 
@@ -47,7 +50,7 @@ function EnterCode() {
         if (e.key === "Enter") {
           joinSession();
         }
-      };
+    };
 
     return (
         <Container>
@@ -60,6 +63,14 @@ function EnterCode() {
                     <Button onClick={joinSession}>Connect</Button>
                 </InputSection>
             </CodeContainer>
+            <Snackbar 
+                open={alertOpen} 
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert severity="error" sx={{ fontSize: '1.5rem' }}>
+                    Invalid Code
+                </Alert>
+            </Snackbar>
         </Container>
     );
 }
