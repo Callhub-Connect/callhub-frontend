@@ -1,6 +1,7 @@
 import React, {useRef, useEffect } from "react";
 import styled from 'styled-components';
 import emailjs from '@emailjs/browser';
+import axios from 'axios';
 
 const Container = styled.div`
     background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
@@ -41,22 +42,6 @@ const Text = styled.h3`
     position: relative;
     margin-bottom: 30px;
 `;
-
-// const Button = styled.button`
-//     height: 55px;
-//     width: 60%;
-//     background-color: #0b9f43;
-//     border-radius: 30px 30px 30px 30px;
-//     position: relative;
-//     color: white;
-//     font-family: 'League Spartan', sans-serif;
-//     font-size: x-large;
-//     border: 0px solid;
-//     cursor: pointer;
-//     &:hover {
-//         background-color: #076a2d;
-//     }
-// `
 
 const InputSection = styled.div`
     height: 70px;
@@ -107,20 +92,34 @@ const Button = styled.button`
 
 function EndSession() {
     const emailRef = useRef();
+    const sessionCode = sessionStorage.getItem("sessionCode");
 
     useEffect(() => emailjs.init("OScF2lHq5ESl_o9lU"), []);
     const sendEmail = async (e) => {
         e.preventDefault();
         const serviceId = "service_2ndgu8t";
         const templateId = "template_feo851p";
+
+        let transcriptUrl = 'http://localhost:8080/session/transcript/' + sessionCode
+
         try {
-          await emailjs.send(serviceId, templateId, {
-            recipient: emailRef.current.value,
-            message: "Hello"
-          });
-          alert("Email successfully sent. Check inbox.");
+            const response = await axios.get(transcriptUrl);
+            console.log(response);
+            
+            if (!response || !response.data) {
+                    throw new Error('Invalid response from the server');
+                  }
+
+            const transcript = response.data;
+            console.log('Transcript:', transcript);
+
+            await emailjs.send(serviceId, templateId, {
+                recipient: emailRef.current.value,
+                message: transcript
+            });
+            alert("Email successfully sent. Check inbox.");
         } catch (error) {
-          console.log(error);
+            console.error('Error fetching transcript or sending email:', error.message);
         }
     };
     return(
