@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import { connectWebsocket } from '../../websocket';
 import { useNavigate } from 'react-router-dom';
-import { Button } from './StartSession.styles';
+import { Button } from './StartSessionButton.styles';
 
 function StartSessionButton() {
   let navigate = useNavigate();

@@ -1,4 +1,4 @@
-import StartSessionButton from '../StartSessionButton';
+import StartSessionButton from '../../helper-components/start-session-button-component/StartSessionButton';
 import { 
     Container,
     Logo,

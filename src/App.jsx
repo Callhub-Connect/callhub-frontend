@@ -4,8 +4,6 @@ import GenerateSession from './components/generate-session-component/GenerateSes
 import EnterCode from './components/enter-code-component/EnterCode';
 import Chat from './components/chat-component/Chat';
 import EndSession from './components/end-session-component/EndSession';
-import StartSession from './components/start-session-component/StartSession';
-
 
 import { createGlobalStyle } from 'styled-components';
 import {
@@ -52,10 +50,6 @@ function App() {
                 <Route
                     path="*"
                     element={<Navigate to="/" />}
-                />
-                <Route
-                    path="/start-session"
-                    element={<StartSession/>}
                 />
             </Routes>
         </Router>
