@@ -1,32 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import Axios from 'axios';
-import styled from 'styled-components';
-
-const FileManagerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const PdfContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-`;
-
-const PdfViewer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  overflow: hidden;
-`;
-
-const PdfIframe = styled.iframe`
-  width: 100%;
-  height: 100%;
-  border: none;
-  margin-bottom: 10px;
-`;
+import { 
+  FileManagerContainer,
+  PdfContainer,
+  PdfViewer,
+  PdfIframe,
+} from './PdfManager-styles';
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);

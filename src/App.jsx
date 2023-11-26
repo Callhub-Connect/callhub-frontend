@@ -1,11 +1,12 @@
 import React from 'react';
-import EnterCode from './components/EnterCode';
-import EndSession from './components/EndSession';
-import StartSessionButton from './components/StartSessionButton';
-import GenerateSession from './components/GenerateSession';
-import Welcome from './components/Welcome';
-import Chat from './components/Chat';
-import PdfFileManager from './components/PdfManager';
+import Welcome from './components/welcome-component/Welcome';
+import GenerateSession from './components/generate-session-component/GenerateSession';
+import EnterCode from './components/enter-code-component/EnterCode';
+import Chat from './components/chat-component/Chat';
+import EndSession from './components/end-session-component/EndSession';
+import StartSession from './components/start-session-component/StartSession';
+
+
 import { createGlobalStyle } from 'styled-components';
 import {
     BrowserRouter as Router,
@@ -45,10 +46,6 @@ function App() {
                     element={<Chat />}
                 />
                 <Route
-                    path="/pdf"
-                    element={<PdfFileManager />}
-                />
-                <Route
                     path="/end"
                     element={<EndSession />}
                 />
@@ -58,7 +55,7 @@ function App() {
                 />
                 <Route
                     path="/start-session"
-                    element={<StartSessionButton/>}
+                    element={<StartSession/>}
                 />
             </Routes>
         </Router>
