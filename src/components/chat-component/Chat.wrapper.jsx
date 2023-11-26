@@ -23,7 +23,7 @@ const ChatWrapper = () => {
       // Show the Snackbar for a short period before navigating
       const navigateTimer = setTimeout(() => {
         navigate("/");
-      }, 2500); // Delay the navigation
+      }, 2000); // Delay the navigation
 
       return () => clearTimeout(navigateTimer);
     }
