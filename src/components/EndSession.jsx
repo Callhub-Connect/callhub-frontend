@@ -119,6 +119,7 @@ function EndSession() {
             });
             alert("Email successfully sent. Check inbox.");
         } catch (error) {
+            alert("Oops! Something went wrong while trying to send the email. Please make sure there are messages in the conversation before sending.");
             console.error('Error fetching transcript or sending email:', error.message);
         }
     };
