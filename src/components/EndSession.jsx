@@ -100,7 +100,8 @@ function EndSession() {
         const serviceId = "service_2ndgu8t";
         const templateId = "template_feo851p";
 
-        let transcriptUrl = 'http://localhost:8080/session/transcript/' + sessionCode
+        let transcriptUrl = 'http://localhost:8080/email/transcript/' + sessionCode
+        let dateUrl = 'http://localhost:8080/email/date/' + sessionCode
 
         try {
             const response = await axios.get(transcriptUrl);
@@ -113,10 +114,16 @@ function EndSession() {
             const transcript = response.data;
             console.log('Transcript:', transcript);
 
+            const dateResponse = await axios.get(dateUrl);
+            const date = dateResponse.data;
+
             await emailjs.send(serviceId, templateId, {
                 recipient: emailRef.current.value,
-                message: transcript
+                message: transcript,
+                date: date
             });
+            // Clear the input after the email is successfully sent
+            emailRef.current.value = "";
             alert("Email successfully sent. Check inbox.");
         } catch (error) {
             alert("Oops! Something went wrong while trying to send the email. Please make sure there are messages in the conversation before sending.");
