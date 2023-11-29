@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import Axios from 'axios';
-import styled from 'styled-components';
 import PdfViewerComponent from './PdfViewerComponent.jsx';
 import DocumentFile from '../../classes/Document.js';
 
