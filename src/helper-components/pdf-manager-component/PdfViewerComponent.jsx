@@ -6,6 +6,7 @@ export default function PdfViewerComponent(props) {
 	useEffect(() => {
 		console.log("loeading new")
 		const container = containerRef.current;
+		// eslint-disable-next-line no-unused-vars
 		let instance, PSPDFKit;
 		(async function () {
 			PSPDFKit = await import('pspdfkit');
