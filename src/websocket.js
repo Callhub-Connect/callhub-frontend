@@ -48,10 +48,18 @@ export function disconnectWebsocket() {
 
 export function sendMessageWebsocket(message) {
   client.publish({
-    destination: `/app/message-${role}/${sessionId}`,
-    body: message,
+    destination: `/app/document-${role}/${sessionId}`,
+    body: documentid,
   });
 }
+
+export function sendDocumentIdWebsocket(documentid) {
+  client.publish({
+    destination: `/app/document-${role}/${sessionId}`,
+    body: documentid,
+  });
+}
+
 
 // Function to subscribe to WebSocket messages in the Chat component
 export function subscribeToMessages(callback) {

@@ -6,6 +6,7 @@ import {
   PdfViewer,
   PdfIframe,
 } from './PdfManager-styles';
+import { sendDocumentIdWebsocket } from '../../websocket';
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
