@@ -1,11 +1,15 @@
 import { Client } from "@stomp/stompjs";
 import websocket from "websocket";
+import Observable from './observable';
 
 Object.assign(global, { WebSocket: websocket.w3cwebsocket });
 
 var client;
 var role;
 var sessionId;
+
+// Create an observable instance
+const messageObservable = new Observable();
 
 export function connectWebsocket(userRole, sessionID) {
   role = userRole;
@@ -15,8 +19,8 @@ export function connectWebsocket(userRole, sessionID) {
     brokerURL: "ws://localhost:8080/callhub",
     onConnect: () => {
       client.subscribe(`/topic/message-${role}/${sessionId}`, (message) => {
-        // TODO: handle received message
-        console.log(`Received: ${message.body}`);
+        // Notify observers when a new message arrives
+        messageObservable.notifyObservers(message.body);
       });
 
       client.onWebSocketError = (error) => {
@@ -35,8 +39,11 @@ export function connectWebsocket(userRole, sessionID) {
 }
 
 export function disconnectWebsocket() {
-  client.deactivate();
-  console.log("websocket disconnected");
+  // Check if the client is defined before calling deactivate
+  if (client) {
+    client.deactivate();
+    console.log("websocket disconnected");
+  }
 }
 
 export function sendMessageWebsocket(message) {
@@ -44,4 +51,14 @@ export function sendMessageWebsocket(message) {
     destination: `/app/message-${role}/${sessionId}`,
     body: message,
   });
+}
+
+// Function to subscribe to WebSocket messages in the Chat component
+export function subscribeToMessages(callback) {
+  messageObservable.addObserver(callback);
+}
+
+// Function to unsubscribe from WebSocket messages in the Chat component
+export function unsubscribeFromMessages(callback) {
+  messageObservable.removeObserver(callback);
 }

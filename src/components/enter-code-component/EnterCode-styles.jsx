@@ -1,10 +1,6 @@
 import styled from "styled-components";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from 'axios';
-import { connectWebsocket } from "../websocket";
 
-const Container = styled.div`
+export const Container = styled.div`
     background-image: linear-gradient(to bottom right, #0a8e3d, #9fdb3f);
     background-size: contain;
     display: flex;
@@ -21,7 +17,7 @@ const Container = styled.div`
     }
 `;
 
-const Logo = styled.img`
+export const Logo = styled.img`
     height: 270px;
     width: 550px;
 
@@ -33,7 +29,7 @@ const Logo = styled.img`
     }
 `;
 
-const CodeContainer = styled.div`
+export const CodeContainer = styled.div`
 align-items: center;
     display: flex;
     flex-direction: column;
@@ -53,7 +49,7 @@ align-items: center;
     }
 `;
 
-const Text = styled.h3`
+export const Text = styled.h3`
     color: #000000;
     font-family: Helvetica;
     font-size: 40px;
@@ -73,7 +69,7 @@ const Text = styled.h3`
     }
 `;
 
-const InputSection = styled.div`
+export const InputSection = styled.div`
     height: 70px;
     width: 724px;
     display: flex;
@@ -89,7 +85,7 @@ const InputSection = styled.div`
     }
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
     border-radius: 30px 0px 0px 30px;
     border: 0px solid;
     width: 80%;
@@ -112,7 +108,7 @@ const Input = styled.input`
     }
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
     height: 50px;
     width: 30%;
     font-family: 'League Spartan', sans-serif;
@@ -135,56 +131,3 @@ const Button = styled.button`
         border-radius: 30px;
     }
 `;
-
-function EnterCode() {
-    let navigate = useNavigate();
-    const [sessionInput, setSessionInput] = useState("");
-
-    // this is just for demo purposes, we're going to need to integrate this with specific session
-    const joinSession = () => {
-        let joinUrl = "http://localhost:8080/session/join/" + sessionInput;
-
-        axios.get(joinUrl)
-            .then(function (response) {
-                console.log(response);
-                let sessionCode = response.data.sessionCode;
-                sessionStorage.setItem('sessionCode', sessionCode);
-                let sessionId = response.data.sessionId;
-                sessionStorage.setItem('sessionId', sessionId);
-                console.log(sessionCode);
-                connectWebsocket('customer', sessionId);
-                let path = `/session`; 
-                navigate(path);
-            })
-            .catch(error => {
-                console.log('error', error);
-                alert('Invalid code');
-            });
-    }
-
-    const handleInputChange = (e) => {
-        setSessionInput(e.target.value);
-    };
-
-    const handleKeyPress = (e) => {
-        if (e.key === "Enter") {
-          joinSession();
-        }
-      };
-
-    return (
-        <Container>
-            <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
-            <CodeContainer>
-                <Text>Enter your session code</Text>
-                <InputSection>
-                    <Input placeholder="ex. abcd123" 
-                        onKeyPress={handleKeyPress} onChange={handleInputChange}/>
-                    <Button onClick={joinSession}>Connect</Button>
-                </InputSection>
-            </CodeContainer>
-        </Container>
-    );
-}
-
-export default EnterCode;

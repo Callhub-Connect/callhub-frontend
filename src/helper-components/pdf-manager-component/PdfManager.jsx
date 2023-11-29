@@ -3,18 +3,11 @@ import Axios from 'axios';
 import styled from 'styled-components';
 import PdfViewerComponent from './PdfViewerComponent.jsx';
 import DocumentFile from '../classes/Document.js';
+import { 
+  FileManagerContainer,
+  PdfContainer,
+} from './PdfManager-styles';
 
-const FileManagerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const PdfContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-`;
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
