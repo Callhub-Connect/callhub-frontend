@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import Axios from 'axios';
+import PdfViewerComponent from './PdfViewerComponent.jsx';
+import DocumentFile from '../../classes/Document.js';
+
 import { 
   FileManagerContainer,
   PdfContainer,
-  PdfViewer,
-  PdfIframe,
 } from './PdfManager-styles';
+
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
@@ -15,10 +17,6 @@ function PdfFileManager() {
     setSelectedPdf(pdf);
   };
 
-  const closePdf = () => {
-    setSelectedPdf(null);
-  };
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setUploadedPdfs([...uploadedPdfs, file]);
@@ -26,12 +24,23 @@ function PdfFileManager() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("name", file.name);
+    let sessionCode = sessionStorage.getItem("sessionCode");
+    console.log(sessionCode)
+    formData.append("session", sessionCode); 
 
     // Send the file to the backend
-    Axios.post('http://localhost:8080/files/upload_network', formData)
+    Axios.post('http://localhost:8080/files/session_add_pdf', formData)
       .then((response) => {
         // File uploaded successfully
         console.log('File uploaded successfully:', response.data);
+        let documentItem = new DocumentFile(
+          {
+            id: response.data,
+            name: file.name,
+            content: file
+          }
+        )
+        setUploadedPdfs([...uploadedPdfs, documentItem]);
       })
       .catch((error) => {
         // Handle any errors (e.g., show an error message)
@@ -42,16 +51,12 @@ function PdfFileManager() {
   // Memoized iframe element
   const pdfViewer = useMemo(() => {
     if (selectedPdf) {
-      return (
-        <PdfViewer>
-          <h4>Viewing: {selectedPdf.name}</h4>
-          <button onClick={closePdf}>Close PDF</button>
-          <PdfIframe src={URL.createObjectURL(selectedPdf)} title="Selected PDF"></PdfIframe>
-        </PdfViewer>
-      );
-    } else {
-      return null;
-    }
+        return (
+            <PdfViewerComponent document={`http://localhost:8080/files/${selectedPdf.id}`}/>
+        );
+      } else {
+        return null;
+      }
   }, [selectedPdf]);
 
   return (
