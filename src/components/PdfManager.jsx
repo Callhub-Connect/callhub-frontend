@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
-import PdfViewerComponent from './PdfViewerComponent';
+import PdfViewerComponent from './PdfViewerComponent.jsx';
+import DocumentFile from '../classes/Document.js';
 
 const FileManagerContainer = styled.div`
   display: flex;
@@ -15,34 +16,12 @@ const PdfContainer = styled.div`
   flex: 1;
 `;
 
-const divStyle = {
-  height: '80%',
-};
-
-const PdfViewer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  overflow: hidden;
-`;
-
-const PdfIframe = styled.iframe`
-  width: 100%;
-  height: 100%;
-  border: none;
-  margin-bottom: 10px;
-`;
-
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
   const [selectedPdf, setSelectedPdf] = useState(null);
 
   const openPdf = (pdf) => {
     setSelectedPdf(pdf);
-  };
-
-  const closePdf = () => {
-    setSelectedPdf(null);
   };
 
   const handleFileChange = (e) => {
@@ -52,33 +31,39 @@ function PdfFileManager() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("name", file.name);
+    let sessionCode = sessionStorage.getItem("sessionCode");
+    console.log(sessionCode)
+    formData.append("session", sessionCode); 
 
-    // // Send the file to the backend
-    // Axios.post('http://localhost:8080/files/upload_network', formData)
-    //   .then((response) => {
-    //     // File uploaded successfully
-    //     console.log('File uploaded successfully:', response.data);
-    //   })
-    //   .catch((error) => {
-    //     // Handle any errors (e.g., show an error message)
-    //     console.error('File upload failed:', error);
-    //   });
+    // Send the file to the backend
+    Axios.post('http://localhost:8080/files/session_add_pdf', formData)
+      .then((response) => {
+        // File uploaded successfully
+        console.log('File uploaded successfully:', response.data);
+        let documentItem = new DocumentFile(
+          {
+            id: response.data,
+            name: file.name,
+            content: file
+          }
+        )
+        setUploadedPdfs([...uploadedPdfs, documentItem]);
+      })
+      .catch((error) => {
+        // Handle any errors (e.g., show an error message)
+        console.error('File upload failed:', error);
+      });
   };
 
   // Memoized iframe element
   const pdfViewer = useMemo(() => {
     if (selectedPdf) {
-      return (
-          <PdfViewerComponent document='http://localhost:8080/files/65602d4b48ee5a1e8cc528ea'/>
-        // <PdfViewer>
-        //   <h4>Viewing: {selectedPdf.name}</h4>
-          
-        //   <PdfIframe src={URL.createObjectURL(selectedPdf)} title="Selected PDF"></PdfIframe>
-        // </PdfViewer> 
-      );
-    } else {
-      return null;
-    }
+        return (
+            <PdfViewerComponent document={`http://localhost:8080/files/${selectedPdf.id}`}/>
+        );
+      } else {
+        return null;
+      }
   }, [selectedPdf]);
 
   return (
