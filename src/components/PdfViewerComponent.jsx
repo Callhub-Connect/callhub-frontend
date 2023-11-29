@@ -4,6 +4,7 @@ export default function PdfViewerComponent(props) {
 	const containerRef = useRef(null);
 
 	useEffect(() => {
+		console.log("loeading new")
 		const container = containerRef.current;
 		let instance, PSPDFKit;
 		(async function () {
@@ -22,8 +23,12 @@ export default function PdfViewerComponent(props) {
 		})();
 
 		return () => PSPDFKit && PSPDFKit.unload(container);
-	}, []);
-
+	}, [props]);
+	
+	// const instance = PSPDFKit.instance.default;
+	// instance.exportPDF().then(arrayBuffer => {
+	// const blob = new Blob ( [arrayBuffer], { type: "application/pdf" });
+	// });
 	return (
 		<div
 			ref={containerRef}
