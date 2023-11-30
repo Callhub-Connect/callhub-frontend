@@ -18,9 +18,16 @@ export function connectWebsocket(userRole, sessionID) {
   client = new Client({
     brokerURL: "ws://localhost:8080/callhub",
     onConnect: () => {
+      // subscribe to messages
       client.subscribe(`/topic/message-${role}/${sessionId}`, (message) => {
         // Notify observers when a new message arrives
         messageObservable.notifyObservers(message.body);
+      });
+
+      // subscribe to end session notifications
+      client.subscribe(`/topic/end-session-${role}/${sessionId}`, (message) => {
+        // TODO: respond to end session notification arrives
+        
       });
 
       client.onWebSocketError = (error) => {
@@ -50,6 +57,12 @@ export function sendMessageWebsocket(message) {
   client.publish({
     destination: `/app/message-${role}/${sessionId}`,
     body: message,
+  });
+}
+
+export function endSessionWebsocket(){
+  client.publish({
+    destination: `/app/end-session-${role}/${sessionId}`,
   });
 }
 

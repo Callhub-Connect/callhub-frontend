@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import PdfFileManager from "../../helper-components/pdf-manager-component/PdfManager";
-import { sendMessageWebsocket, disconnectWebsocket, subscribeToMessages, unsubscribeFromMessages } from "../../websocket";
+import { sendMessageWebsocket, disconnectWebsocket, subscribeToMessages, unsubscribeFromMessages, endSessionWebsocket } from "../../websocket";
 import { 
   Container, 
   Header, 
@@ -54,6 +55,17 @@ function Chat() {
     }
   };
 
+  function notifyEndSession(){
+    let url = "http://localhost:8080/end-session/" + sessionStorage.getItem('sessionCode');
+    axios.get(url)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  }
+
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
     // Clear the messages when the session ends
@@ -61,6 +73,9 @@ function Chat() {
     sessionStorage.removeItem("chatMessages");
     sessionStorage.removeItem("sessionId")
     sessionStorage.removeItem("sessionCode")
+
+    notifyEndSession();
+    endSessionWebsocket();
     disconnectWebsocket();
     
     let path = `/end`; 
