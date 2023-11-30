@@ -28,13 +28,11 @@ export const Left = styled.div`
     display: flex;
     flex-direction: column;
     justify-items: auto;
-    padding-left: 20px;
-    padding-right: 20px;
     background-color: #bbe4b2d6;
 `;
 
 export const Right = styled.div`
-    flex: 1.5;
+    flex: 1.25;
     display: flex;
     flex-direction: column;
     background-image: linear-gradient(115deg, #41b147d5 0.23%, #81c740d4 92.92%);
