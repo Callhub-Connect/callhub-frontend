@@ -59,8 +59,6 @@ function Chat() {
     // Clear the messages when the session ends
     setMessages([]);
     sessionStorage.removeItem("chatMessages");
-    sessionStorage.removeItem("sessionId");
-    sessionStorage.removeItem("sessionCode");
     localStorage.removeItem("isSessionActive");
     disconnectWebsocket();
     
