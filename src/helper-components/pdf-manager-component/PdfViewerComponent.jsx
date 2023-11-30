@@ -4,6 +4,7 @@ export default function PdfViewerComponent(props) {
 	const containerRef = useRef(null);
 	const [pdfInstance, setPdfInstance] = useState(null);
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		const container = containerRef.current;
 		let PSPDFKit;
@@ -27,6 +28,7 @@ export default function PdfViewerComponent(props) {
 		};
 	}, [props.document]); // Dependency array should contain props.document	
 
+	// eslint-disable-next-line no-unused-vars
 	const exportPdf = async () => {
 		if (pdfInstance) {
 		  const pdfData = await pdfInstance.exportPDF();
@@ -46,6 +48,7 @@ export default function PdfViewerComponent(props) {
 			exportPdf,
 		});
 	}
+	// eslint-disable-next-line
 	}, [pdfInstance]);
 	
 	// const instance = PSPDFKit.instance.default;
