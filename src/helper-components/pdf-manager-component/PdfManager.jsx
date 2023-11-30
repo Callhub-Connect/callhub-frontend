@@ -41,7 +41,7 @@ function PdfFileManager() {
     formData.append("session", sessionCode); 
 
     // Send the file to the backend
-    Axios.post('http://localhost:8080/files/session_add_pdf', formData)
+    Axios.post('https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/files/session_add_pdf', formData)
       .then((response) => {
         // File uploaded successfully
         console.log('File uploaded successfully:', response.data);
@@ -67,7 +67,7 @@ function PdfFileManager() {
   const pdfViewer = useMemo(() => {
     if (selectedPdf) {
         return (
-          <PdfViewerComponent document={`http://localhost:8080/files/${selectedPdf.id}`}/>
+          <PdfViewerComponent document={`https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/files/${selectedPdf.id}`}/>
         );
       } else {
         return null;

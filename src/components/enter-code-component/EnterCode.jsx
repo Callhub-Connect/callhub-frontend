@@ -20,7 +20,7 @@ function EnterCode() {
     const [alertOpen, setAlertOpen] = useState(false);
 
     const joinSession = () => {
-        let joinUrl = "http://localhost:8080/session/join/" + sessionInput;
+        let joinUrl = "https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/session/join/" + sessionInput;
 
         axios.get(joinUrl)
             .then(function (response) {
