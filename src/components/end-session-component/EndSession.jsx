@@ -1,6 +1,8 @@
-import React, {useRef, useEffect } from "react";
+import React, {useRef, useEffect, useState} from "react";
 import emailjs from '@emailjs/browser';
 import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 import {
     Container,
@@ -15,6 +17,8 @@ import {
 function EndSession() {
     const emailRef = useRef();
     const sessionCode = sessionStorage.getItem("sessionCode");
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
     useEffect(() => emailjs.init("OScF2lHq5ESl_o9lU"), []);
     const sendEmail = async (e) => {
@@ -22,6 +26,7 @@ function EndSession() {
         const serviceId = "service_2ndgu8t";
         const templateId = "template_feo851p";
 
+        // TODO: change to azure endpoint
         let transcriptUrl = 'http://localhost:8080/email/transcript/' + sessionCode
         let dateUrl = 'http://localhost:8080/email/date/' + sessionCode
 
@@ -46,10 +51,14 @@ function EndSession() {
             });
             // Clear the input after the email is successfully sent
             emailRef.current.value = "";
-            alert("Email successfully sent. Check inbox.");
+            // alert("Email successfully sent. Check inbox.");
+            setSuccess(true);
+            setTimeout(() => setSuccess(false), 5000);
         } catch (error) {
-            alert("Oops! Something went wrong while trying to send the email. Please make sure there are messages in the conversation before sending.");
+            // alert("Oops! Something went wrong while trying to send the email. Please make sure there are messages in the conversation before sending.");
             console.error('Error fetching transcript or sending email:', error.message);
+            setError(true);
+            setTimeout(() => setError(false), 5000);
         }
     };
     return(
@@ -62,6 +71,22 @@ function EndSession() {
                     <Button onClick={sendEmail}>Get Email Transcript</Button>
                 </InputSection>
             </CodeContainer>
+            <Snackbar
+                open={success}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert severity="success" sx={{ fontSize: '1.5rem' }}>
+                    Email successfully sent. Check inbox.
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={error}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert severity="error" sx={{ fontSize: '1.5rem' }}>
+                    Oops! Something went wrong while trying to send the email. Please make sure there are messages in the conversation before sending.
+                </Alert>
+            </Snackbar>
         </Container>
     );
 }
