@@ -37,7 +37,7 @@ export const PdfNavbar = styled.div`
 `;
 
 export const Button = styled.button`
-    width: 30%;
+    width: 25%;
     font-family: 'League Spartan', sans-serif;
     background-color: #0b9f43;
     border-width: 0;
