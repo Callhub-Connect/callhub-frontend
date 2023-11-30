@@ -32,7 +32,7 @@ export default function PdfViewerComponent(props) {
 		  const pdfData = await pdfInstance.exportPDF();
 		  return new Blob([pdfData], { type: "application/pdf" });
 		}
-	  };
+	};
 
 	// Expose the exportPdf function to parent via props
 	useEffect(() => {
