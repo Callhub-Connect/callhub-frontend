@@ -6,9 +6,8 @@ import DocumentFile from '../../classes/Document.js';
 import { 
   FileManagerContainer,
   PdfContainer,
-  PdfViewer,
-  PdfIframe,
 } from './PdfManager-styles';
+
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
