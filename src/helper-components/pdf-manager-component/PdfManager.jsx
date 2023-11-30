@@ -7,7 +7,9 @@ import {
   FormControl,
   MenuItem,
   InputLabel,
-} from "@mui/material"
+  Alert,
+  Snackbar,
+} from "@mui/material";
 import { 
   FileManagerContainer,
   PdfContainer,
@@ -20,6 +22,7 @@ function PdfFileManager() {
   const [selectedPdf, setSelectedPdf] = useState('');
   const fileInputRef = useRef(null);
   const [pdfViewerInstance, setPdfViewerInstance] = useState(null);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -94,6 +97,8 @@ function PdfFileManager() {
         .then(response => {
           // Handle success
           console.log('PDF updated successfully:', response.data);
+          setAlertOpen(true);
+          setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
         })
         .catch(error => {
           // Handle error
@@ -105,6 +110,14 @@ function PdfFileManager() {
 
   return (
     <FileManagerContainer>
+      <Snackbar 
+        open={alertOpen} 
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+          <Alert severity="success" sx={{ fontSize: '1.5rem' }}>
+            PDF changes saved successfully
+          </Alert>
+      </Snackbar>
       <PdfNavbar>
         <input
           type="file"
