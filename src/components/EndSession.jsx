@@ -100,8 +100,8 @@ function EndSession() {
         const serviceId = "service_2ndgu8t";
         const templateId = "template_feo851p";
 
-        let transcriptUrl = 'http://localhost:8080/email/transcript/' + sessionCode
-        let dateUrl = 'http://localhost:8080/email/date/' + sessionCode
+        let transcriptUrl = 'https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/email/transcript/' + sessionCode
+        let dateUrl = 'https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/email/date/' + sessionCode
 
         try {
             const response = await axios.get(transcriptUrl);
