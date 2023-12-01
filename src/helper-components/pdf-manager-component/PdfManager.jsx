@@ -23,6 +23,8 @@ function PdfFileManager() {
   const fileInputRef = useRef(null);
   const [pdfViewerInstance, setPdfViewerInstance] = useState(null);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('success'); // 'success' or 'error'
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -60,10 +62,18 @@ function PdfFileManager() {
         if (!uploadedPdfs.some(pdf => pdf.id === response.data)) {
           setUploadedPdfs([...uploadedPdfs, documentItem]);
         }
+        setAlertSeverity('success');
+        setAlertMessage('File uploaded successfully');
+        setAlertOpen(true);
+        setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
       })
       .catch((error) => {
         // Handle any errors (e.g., show an error message)
         console.error('File upload failed:', error);
+        setAlertMessage('Error uploading file');
+        setAlertSeverity('error');
+        setAlertOpen(true);
+        setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
       });
   };
 
@@ -89,20 +99,23 @@ function PdfFileManager() {
           console.error('No data returned from exportPdf');
           return;
         }
-
         const formData = new FormData();
         formData.append("file", blob, `updated_${selectedPdf.name}`); // Ensure blob is a Blob object
   
         Axios.put(`http://localhost:8080/files/update/${selectedPdf.id}`, formData)
         .then(response => {
-          // Handle success
           console.log('PDF updated successfully:', response.data);
+          setAlertMessage("PDF changes saved successfully");
+          setAlertSeverity('success');
           setAlertOpen(true);
           setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
         })
         .catch(error => {
-          // Handle error
           console.error('PDF update failed:', error);
+          setAlertMessage("Error saving PDF changes");
+          setAlertSeverity('error');
+          setAlertOpen(true);
+          setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
         });
       });
     }
@@ -110,13 +123,16 @@ function PdfFileManager() {
 
   return (
     <FileManagerContainer>
-      <Snackbar 
-        open={alertOpen} 
+      <Snackbar
+        open={alertOpen}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-          <Alert severity="success" sx={{ fontSize: '1.5rem' }}>
-            PDF changes saved successfully
-          </Alert>
+        <Alert 
+          severity={alertSeverity} 
+          sx={{ fontSize: '1.5rem' }}
+        >
+          {alertMessage}
+        </Alert>
       </Snackbar>
       <PdfNavbar>
         <input
