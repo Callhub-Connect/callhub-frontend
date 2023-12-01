@@ -33,6 +33,7 @@ function PdfFileManager() {
       .then((response) => {
         // File uploaded successfully
         console.log('File uploaded successfully:', response.data);
+        sendDocumentIdWebsocket(response.data);
       })
       .catch((error) => {
         // Handle any errors (e.g., show an error message)

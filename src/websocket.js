@@ -23,6 +23,11 @@ export function connectWebsocket(userRole, sessionID) {
         messageObservable.notifyObservers(message.body);
       });
 
+      client.subscribe(`/topic/document-${role}/${sessionId}`, (documentid) => {
+        // TODO: Notify observers when a new document arrives
+        console.log(documentid.body);
+      });
+
       client.onWebSocketError = (error) => {
         console.error("Error with websocket", error);
       };
@@ -59,7 +64,6 @@ export function sendDocumentIdWebsocket(documentid) {
     body: documentid,
   });
 }
-
 
 // Function to subscribe to WebSocket messages in the Chat component
 export function subscribeToMessages(callback) {
