@@ -59,7 +59,7 @@ function Chat() {
   const sessionEnded = useCallback(() => {
     alert("Session was ended by other user");
     clearSessionAndNavigate();
-  }, []);
+  });
 
   function notifyEndSession(){
     let url = "http://localhost:8080/session/end-session/" + sessionStorage.getItem('sessionCode');
@@ -78,7 +78,7 @@ function Chat() {
     clearSessionAndNavigate();
   };
 
-  function clearSessionAndNavigate(){
+ const clearSessionAndNavigate(){
     // Clear the messages when the session ends
     setMessages([]);
     sessionStorage.removeItem("chatMessages");
@@ -91,7 +91,7 @@ function Chat() {
     
     let path = `/end`; 
     navigate(path);
-  }
+  };
 
   // Create a ref to the MessageContainer element
   const messageContainerRef = useRef();
