@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import PdfFileManager from "../../helper-components/pdf-manager-component/PdfManager";
-import { sendMessageWebsocket, disconnectWebsocket, subscribeToMessages, unsubscribeFromMessages } from "../../websocket";
+import { sendMessageWebsocket, disconnectWebsocket, subscribeToMessages, unsubscribeFromMessages, endSessionWebsocket, subscribeToEndSession, unsubscribeToEndSession } from "../../websocket";
 import { 
   Container, 
   Header, 
@@ -54,13 +55,39 @@ function Chat() {
     }
   };
 
+  // session ended by other user
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const sessionEnded = useCallback(() => {
+    alert("Session was ended by other user");
+    clearSessionAndNavigate();
+  });
+
+  function notifyEndSession(){
+    let url = "http://localhost:8080/session/end-session/" + sessionStorage.getItem('sessionCode');
+    axios.get(url)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  }
+
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
+    notifyEndSession();
+    clearSessionAndNavigate();
+  };
+
+function clearSessionAndNavigate(){
     // Clear the messages when the session ends
     setMessages([]);
     sessionStorage.removeItem("chatMessages");
-    sessionStorage.removeItem("sessionId")
-    sessionStorage.removeItem("sessionCode")
+    sessionStorage.removeItem("sessionId");
+    sessionStorage.removeItem("sessionCode");
+    unsubscribeToEndSession(sessionEnded);
+
+    endSessionWebsocket();
     disconnectWebsocket();
     
     let path = `/end`; 
@@ -99,12 +126,13 @@ function Chat() {
     };
   
     subscribeToMessages(handleIncomingMessage);
+    subscribeToEndSession(sessionEnded);
   
     // Unsubscribe when the component is unmounted
     return () => {
       unsubscribeFromMessages(handleIncomingMessage);
     };
-  }, [messages]);
+  }, [messages, sessionEnded]);
 
   return (
     <Container>

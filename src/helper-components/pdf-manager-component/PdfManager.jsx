@@ -1,39 +1,63 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import Axios from 'axios';
+import PdfViewerComponent from './PdfViewerComponent.jsx';
+import DocumentFile from '../../classes/Document.js';
+import {
+  Select,
+  FormControl,
+  MenuItem,
+  InputLabel,
+} from "@mui/material"
 import { 
   FileManagerContainer,
   PdfContainer,
-  PdfViewer,
-  PdfIframe,
+  PdfNavbar,
+  Button,
 } from './PdfManager-styles';
 import { sendDocumentIdWebsocket } from '../../websocket';
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
-  const [selectedPdf, setSelectedPdf] = useState(null);
+  const [selectedPdf, setSelectedPdf] = useState('');
+  const fileInputRef = useRef(null);
 
-  const openPdf = (pdf) => {
-    setSelectedPdf(pdf);
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
   };
 
-  const closePdf = () => {
-    setSelectedPdf(null);
+  const openPdf = (event) => {
+    const selectedPdfId = event.target.value;
+    const pdf = uploadedPdfs.find(pdf => pdf.id === selectedPdfId);
+    setSelectedPdf(pdf);
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setUploadedPdfs([...uploadedPdfs, file]);
     // Create a FormData object to send the file
     const formData = new FormData();
     formData.append("file", file);
     formData.append("name", file.name);
+    let sessionCode = sessionStorage.getItem("sessionCode");
+    console.log(sessionCode)
+    formData.append("session", sessionCode); 
 
     // Send the file to the backend
-    Axios.post('http://localhost:8080/files/upload_network', formData)
+    Axios.post('http://localhost:8080/files/session_add_pdf', formData)
       .then((response) => {
         // File uploaded successfully
         console.log('File uploaded successfully:', response.data);
         sendDocumentIdWebsocket(response.data);
+        let documentItem = new DocumentFile(
+          {
+            id: response.data,
+            name: file.name,
+            content: file
+          }
+        )
+        // Update to prevent duplicate files
+        if (!uploadedPdfs.some(pdf => pdf.id === response.data)) {
+          setUploadedPdfs([...uploadedPdfs, documentItem]);
+        }
       })
       .catch((error) => {
         // Handle any errors (e.g., show an error message)
@@ -44,39 +68,88 @@ function PdfFileManager() {
   // Memoized iframe element
   const pdfViewer = useMemo(() => {
     if (selectedPdf) {
-      return (
-        <PdfViewer>
-          <h4>Viewing: {selectedPdf.name}</h4>
-          <button onClick={closePdf}>Close PDF</button>
-          <PdfIframe src={URL.createObjectURL(selectedPdf)} title="Selected PDF"></PdfIframe>
-        </PdfViewer>
-      );
-    } else {
-      return null;
-    }
+        return (
+          <PdfViewerComponent document={`http://localhost:8080/files/${selectedPdf.id}`}/>
+        );
+      } else {
+        return null;
+      }
   }, [selectedPdf]);
 
   return (
     <FileManagerContainer>
-      <h2>Upload a PDF</h2>
-
-      {/* Upload PDF Button */}
-      <input type="file" accept=".pdf" onChange={handleFileChange} id="fileInput" />
-
+      <PdfNavbar>
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={handleFileChange}
+          id="fileInput"
+          style={{ display: 'none' }} // Hide the actual file input
+          ref={fileInputRef}
+        />
+        <Button onClick={handleButtonClick}>Upload PDF</Button>
+        <FormControl sx={{ width: "40%" }}>
+        <InputLabel
+          id="pdf-select-label"
+          sx={{
+            color: 'white', // Change label color to white
+            fontSize: '1.75rem', // Increase the font size of the label
+          }}
+        >
+          Select
+        </InputLabel>
+        <Select
+          labelId="pdf-select-label"
+          id="pdf-select"
+          value={selectedPdf ? selectedPdf.id : ''}
+          label="Select PDF"
+          onChange={openPdf}
+          sx={{
+            height: '50px',
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: 'white',
+              },
+              "&:hover fieldset": {
+                borderColor: 'white',
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: 'white',
+              },
+              // Adjust the padding to vertically center the text
+              paddingTop: '6px', 
+              paddingBottom: '6px',
+            },
+            "& .MuiInputLabel-root": { 
+              color: 'white',
+              fontSize: '1.75rem', // Increase the font size of the input label
+            },
+            "& .MuiFormHelperText-root": { 
+              color: 'white',
+            },
+            "& .MuiSelect-icon": { 
+              color: 'white',
+            },
+            "& .MuiSelect-select": { 
+              color: 'white',
+              fontSize: '1.75rem', // Increase the font size of the select text
+              lineHeight: '1.43', // Adjust line height to center the text
+            },
+          }}
+        >
+          {uploadedPdfs.map((pdf) => (
+            <MenuItem 
+              key={pdf.id} 
+              value={pdf.id}
+              sx={{ fontSize: '1.75rem' }} // Increase the font size of menu items
+            >
+              {pdf.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      </PdfNavbar>
       <PdfContainer>
-        {/* Display Uploaded PDFs */}
-        <div className="uploaded-pdfs">
-          <h2>Uploaded PDFs</h2>
-          <ul>
-            {uploadedPdfs.map((pdf, index) => (
-              <li style={{cursor: "pointer"}} key={index} onClick={() => openPdf(pdf)}>
-                {pdf.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* View Selected PDF */}
         {pdfViewer}
       </PdfContainer>
     </FileManagerContainer>

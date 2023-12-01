@@ -13,13 +13,12 @@ function StartSessionButton() {
     //TODO: replace with hosted address
     axios.get("http://localhost:8080/session/new-session")
       .then(function (response) {
-        console.log(response);
         let sessionCode = response.data.sessionCode;
         sessionStorage.setItem('sessionCode', sessionCode);
         let sessionId = response.data.sessionId;
         sessionStorage.setItem('sessionId', sessionId);
         connectWebsocket('employee', sessionId);
-        console.log(sessionCode);
+        localStorage.setItem('isSessionActive', 'true');
         let path = `/session`;
         navigate(path);
       })

@@ -10,6 +10,7 @@ var sessionId;
 
 // Create an observable instance
 const messageObservable = new Observable();
+const endSessionObservable = new Observable();
 
 export function connectWebsocket(userRole, sessionID) {
   role = userRole;
@@ -18,6 +19,7 @@ export function connectWebsocket(userRole, sessionID) {
   client = new Client({
     brokerURL: "ws://localhost:8080/callhub",
     onConnect: () => {
+      // subscribe to messages
       client.subscribe(`/topic/message-${role}/${sessionId}`, (message) => {
         // Notify observers when a new message arrives
         messageObservable.notifyObservers(message.body);
@@ -26,6 +28,12 @@ export function connectWebsocket(userRole, sessionID) {
       client.subscribe(`/topic/document-${role}/${sessionId}`, (documentid) => {
         // TODO: Notify observers when a new document arrives
         console.log(documentid.body);
+      });
+
+      // subscribe to end session notifications
+      client.subscribe(`/topic/end-session/${sessionId}`, (message) => {
+        // Notify observers that session has ended
+        endSessionObservable.notifyObservers();
       });
 
       client.onWebSocketError = (error) => {
@@ -65,6 +73,12 @@ export function sendDocumentIdWebsocket(documentid) {
   });
 }
 
+export function endSessionWebsocket(){
+  client.publish({
+    destination: `/app/end-session/${sessionId}`,
+  });
+}
+
 // Function to subscribe to WebSocket messages in the Chat component
 export function subscribeToMessages(callback) {
   messageObservable.addObserver(callback);
@@ -73,4 +87,12 @@ export function subscribeToMessages(callback) {
 // Function to unsubscribe from WebSocket messages in the Chat component
 export function unsubscribeFromMessages(callback) {
   messageObservable.removeObserver(callback);
+}
+
+export function subscribeToEndSession(callback) {
+  endSessionObservable.addObserver(callback);
+}
+
+export function unsubscribeToEndSession(callback) {
+  endSessionObservable.removeObserver(callback);
 }
