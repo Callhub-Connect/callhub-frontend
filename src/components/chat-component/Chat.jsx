@@ -25,7 +25,7 @@ import {
 function Chat() {
   const storedMessages = JSON.parse(sessionStorage.getItem("chatMessages"));
   const [inputMessage, setInputMessage] = useState("");
-  const [messages, setMessages] = useState(storedMessages || []);
+  const [messages, setMessages, sessionEnded] = useState(storedMessages || []);
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
