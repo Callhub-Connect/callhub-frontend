@@ -56,6 +56,7 @@ function Chat() {
   };
 
   // session ended by other user
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const sessionEnded = useCallback(() => {
     alert("Session was ended by other user");
     clearSessionAndNavigate();
