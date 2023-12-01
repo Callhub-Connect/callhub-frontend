@@ -78,7 +78,7 @@ function Chat() {
     clearSessionAndNavigate();
   };
 
- const clearSessionAndNavigate(){
+function clearSessionAndNavigate(){
     // Clear the messages when the session ends
     setMessages([]);
     sessionStorage.removeItem("chatMessages");
