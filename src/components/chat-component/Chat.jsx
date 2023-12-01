@@ -144,17 +144,6 @@ function clearSessionAndNavigate(){
 
   return (
     <Container>
-      <Snackbar
-        open={alertOpen}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert 
-          severity="info"
-          sx={{ fontSize: '1.5rem' }}
-        >
-          Session was ended by other user
-        </Alert>
-      </Snackbar>
       <Header>
         <Logo src="./img/callhubLogo2.svg" alt="Callhub Logo" />
         <div style={{ display: "flex", gap: "20px", alignItems: "center", width: "330px"}}>
