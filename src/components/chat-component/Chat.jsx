@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import PdfFileManager from "../../helper-components/pdf-manager-component/PdfManager";
@@ -25,7 +25,7 @@ import {
 function Chat() {
   const storedMessages = JSON.parse(sessionStorage.getItem("chatMessages"));
   const [inputMessage, setInputMessage] = useState("");
-  const [messages, setMessages, sessionEnded] = useState(storedMessages || []);
+  const [messages, setMessages] = useState(storedMessages || []);
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
@@ -56,10 +56,10 @@ function Chat() {
   };
 
   // session ended by other user
-  function sessionEnded(){
+  const sessionEnded = useCallback(() => {
     alert("Session was ended by other user");
     clearSessionAndNavigate();
-  }
+  }, []);
 
   function notifyEndSession(){
     let url = "http://localhost:8080/session/end-session/" + sessionStorage.getItem('sessionCode');
@@ -131,7 +131,7 @@ function Chat() {
     return () => {
       unsubscribeFromMessages(handleIncomingMessage);
     };
-  }, [messages]);
+  }, [messages, sessionEnded]);
 
   return (
     <Container>
