@@ -10,6 +10,7 @@ var sessionId;
 
 // Create an observable instance
 const messageObservable = new Observable();
+const endSessionObservable = new Observable();
 
 export function connectWebsocket(userRole, sessionID) {
   role = userRole;
@@ -25,9 +26,9 @@ export function connectWebsocket(userRole, sessionID) {
       });
 
       // subscribe to end session notifications
-      client.subscribe(`/topic/end-session-${role}/${sessionId}`, (message) => {
-        // TODO: respond to end session notification arrives
-        
+      client.subscribe(`/topic/end-session/${sessionId}`, (message) => {
+        // Notify observers that session has ended
+        endSessionObservable.notifyObservers();
       });
 
       client.onWebSocketError = (error) => {
@@ -62,7 +63,7 @@ export function sendMessageWebsocket(message) {
 
 export function endSessionWebsocket(){
   client.publish({
-    destination: `/app/end-session-${role}/${sessionId}`,
+    destination: `/app/end-session/${sessionId}`,
   });
 }
 
@@ -74,4 +75,12 @@ export function subscribeToMessages(callback) {
 // Function to unsubscribe from WebSocket messages in the Chat component
 export function unsubscribeFromMessages(callback) {
   messageObservable.removeObserver(callback);
+}
+
+export function subscribeToEndSession(callback) {
+  endSessionObservable.addObserver(callback);
+}
+
+export function unsubscribeToEndSession(callback) {
+  endSessionObservable.removeObserver(callback);
 }
