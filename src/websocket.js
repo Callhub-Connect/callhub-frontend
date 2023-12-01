@@ -61,8 +61,8 @@ export function disconnectWebsocket() {
 
 export function sendMessageWebsocket(message) {
   client.publish({
-    destination: `/app/document-${role}/${sessionId}`,
-    body: documentid,
+    destination: `/app/message-${role}/${sessionId}`,
+    body: message,
   });
 }
 
