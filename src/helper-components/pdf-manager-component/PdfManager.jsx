@@ -7,7 +7,9 @@ import {
   FormControl,
   MenuItem,
   InputLabel,
-} from "@mui/material"
+  Alert,
+  Snackbar,
+} from "@mui/material";
 import { 
   FileManagerContainer,
   PdfContainer,
@@ -19,6 +21,10 @@ function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
   const [selectedPdf, setSelectedPdf] = useState('');
   const fileInputRef = useRef(null);
+  const [pdfViewerInstance, setPdfViewerInstance] = useState(null);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('success'); // 'success' or 'error'
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -56,10 +62,18 @@ function PdfFileManager() {
         if (!uploadedPdfs.some(pdf => pdf.id === response.data)) {
           setUploadedPdfs([...uploadedPdfs, documentItem]);
         }
+        setAlertSeverity('success');
+        setAlertMessage('File uploaded successfully');
+        setAlertOpen(true);
+        setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
       })
       .catch((error) => {
         // Handle any errors (e.g., show an error message)
         console.error('File upload failed:', error);
+        setAlertMessage('Error uploading file');
+        setAlertSeverity('error');
+        setAlertOpen(true);
+        setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
       });
   };
 
@@ -67,15 +81,59 @@ function PdfFileManager() {
   const pdfViewer = useMemo(() => {
     if (selectedPdf) {
         return (
-          <PdfViewerComponent document={`http://localhost:8080/files/${selectedPdf.id}`}/>
+          <PdfViewerComponent
+            document={`http://localhost:8080/files/${selectedPdf.id}`}
+            onInstanceChange={instance => setPdfViewerInstance(instance)}
+          />
         );
       } else {
         return null;
       }
   }, [selectedPdf]);
 
+  const handleSave = () => {
+    if (pdfViewerInstance && selectedPdf) {
+      pdfViewerInstance.exportPdf().then((blob) => {
+        console.log(blob); // Check what is being returned here
+        if (!blob) {
+          console.error('No data returned from exportPdf');
+          return;
+        }
+        const formData = new FormData();
+        formData.append("file", blob, `updated_${selectedPdf.name}`); // Ensure blob is a Blob object
+  
+        Axios.put(`http://localhost:8080/files/update/${selectedPdf.id}`, formData)
+        .then(response => {
+          console.log('PDF updated successfully:', response.data);
+          setAlertMessage("PDF changes saved successfully");
+          setAlertSeverity('success');
+          setAlertOpen(true);
+          setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
+        })
+        .catch(error => {
+          console.error('PDF update failed:', error);
+          setAlertMessage("Error saving PDF changes");
+          setAlertSeverity('error');
+          setAlertOpen(true);
+          setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
+        });
+      });
+    }
+  };  
+
   return (
     <FileManagerContainer>
+      <Snackbar
+        open={alertOpen}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          severity={alertSeverity} 
+          sx={{ fontSize: '1.5rem' }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <PdfNavbar>
         <input
           type="file"
@@ -86,6 +144,7 @@ function PdfFileManager() {
           ref={fileInputRef}
         />
         <Button onClick={handleButtonClick}>Upload PDF</Button>
+        <Button onClick={handleSave}>Save Changes</Button>
         <FormControl sx={{ width: "40%" }}>
         <InputLabel
           id="pdf-select-label"
