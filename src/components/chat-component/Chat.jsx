@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import {
+  Alert,
+  Snackbar,
+} from "@mui/material";
 import PdfFileManager from "../../helper-components/pdf-manager-component/PdfManager";
 import { sendMessageWebsocket, disconnectWebsocket, subscribeToMessages, unsubscribeFromMessages, endSessionWebsocket, subscribeToEndSession, unsubscribeToEndSession } from "../../websocket";
 import { 
@@ -26,6 +30,7 @@ function Chat() {
   const storedMessages = JSON.parse(sessionStorage.getItem("chatMessages"));
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState(storedMessages || []);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
@@ -58,8 +63,9 @@ function Chat() {
   // session ended by other user
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const sessionEnded = useCallback(() => {
-    console.log("session ended by other user")
-    alert("Session was ended by other user");
+    console.log("Session ended by other user")
+    setAlertOpen(true);
+    setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
     clearSessionAndNavigate();
   });
 
@@ -87,6 +93,7 @@ function clearSessionAndNavigate(){
     sessionStorage.removeItem("chatMessages");
     sessionStorage.removeItem("sessionId");
     sessionStorage.removeItem("sessionCode");
+    localStorage.setItem("isSessionActive", 'false');
     unsubscribeToEndSession(sessionEnded);
 
     disconnectWebsocket();
@@ -137,6 +144,17 @@ function clearSessionAndNavigate(){
 
   return (
     <Container>
+      <Snackbar
+        open={alertOpen}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          severity="info"
+          sx={{ fontSize: '1.5rem' }}
+        >
+          Session was ended by other user
+        </Alert>
+      </Snackbar>
       <Header>
         <Logo src="./img/callhubLogo2.svg" alt="Callhub Logo" />
         <div style={{ display: "flex", gap: "20px", alignItems: "center", width: "330px"}}>
