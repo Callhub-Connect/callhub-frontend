@@ -139,7 +139,7 @@ function Chat() {
         <Logo src="./img/callhubLogo2.svg" alt="Callhub Logo" />
         <div style={{ display: "flex", gap: "20px", alignItems: "center", width: "330px"}}>
           <h2>{sessionStorage.getItem("sessionCode")}</h2>
-          <EndButton onClick={routeChange}>End Session</EndButton>
+          <EndButton onClick={endSession}>End Session</EndButton>
         </div>
       </Header>
       <DualContainer>
