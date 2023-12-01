@@ -58,6 +58,7 @@ function Chat() {
   // session ended by other user
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const sessionEnded = useCallback(() => {
+    console.log("session ended by other user")
     alert("Session was ended by other user");
     clearSessionAndNavigate();
   });
@@ -71,6 +72,7 @@ function Chat() {
       .catch(error => {
         console.log('error', error);
       });
+      endSessionWebsocket();
   }
 
   let navigate = useNavigate(); 
@@ -87,7 +89,6 @@ function clearSessionAndNavigate(){
     sessionStorage.removeItem("sessionCode");
     unsubscribeToEndSession(sessionEnded);
 
-    endSessionWebsocket();
     disconnectWebsocket();
     
     let path = `/end`; 

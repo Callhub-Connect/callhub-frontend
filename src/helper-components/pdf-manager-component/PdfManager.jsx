@@ -16,6 +16,7 @@ import {
   PdfNavbar,
   Button,
 } from './PdfManager-styles';
+import { sendDocumentIdWebsocket } from '../../websocket';
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
@@ -51,6 +52,7 @@ function PdfFileManager() {
       .then((response) => {
         // File uploaded successfully
         console.log('File uploaded successfully:', response.data);
+        sendDocumentIdWebsocket(response.data);
         let documentItem = new DocumentFile(
           {
             id: response.data,
