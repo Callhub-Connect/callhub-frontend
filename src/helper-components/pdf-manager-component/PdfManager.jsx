@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import Axios from 'axios';
 import PdfViewerComponent from './PdfViewerComponent.jsx';
 import DocumentFile from '../../classes/Document.js';
@@ -31,7 +31,7 @@ function PdfFileManager() {
     fileInputRef.current.click();
   };
 
-  const openPdf = (event) => {
+  const openPdf = useCallback((event) => {
     const selectedPdfId = event.target.value;
   
     // Check if the selected PDF is already open
@@ -48,7 +48,7 @@ function PdfFileManager() {
       const pdf = uploadedPdfs.find(pdf => pdf.id === selectedPdfId);
       setSelectedPdf(pdf);
     }
-  };
+  }, [uploadedPdfs, selectedPdf]);
 
   const fetchPdfById = async (pdfId) => {
     try {
@@ -185,7 +185,7 @@ function PdfFileManager() {
       // Cleanup Blob URLs if necessary
       uploadedPdfs.forEach(pdf => URL.revokeObjectURL(pdf.content));
     };
-  }, [uploadedPdfs, selectedPdf]);
+  }, [uploadedPdfs, selectedPdf, openPdf]);
 
   return (
     <FileManagerContainer>
