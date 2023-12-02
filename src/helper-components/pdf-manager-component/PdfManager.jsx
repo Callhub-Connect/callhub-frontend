@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Axios from 'axios';
 import PdfViewerComponent from './PdfViewerComponent.jsx';
 import DocumentFile from '../../classes/Document.js';
@@ -16,7 +16,7 @@ import {
   PdfNavbar,
   Button,
 } from './PdfManager-styles';
-import { sendDocumentIdWebsocket } from '../../websocket';
+import { sendDocumentIdWebsocket, subscribeToFiles, unsubscribeFromFiles } from '../../websocket';
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
@@ -37,6 +37,23 @@ function PdfFileManager() {
     setSelectedPdf(pdf);
   };
 
+  const fetchPdfById = async (pdfId) => {
+    try {
+      const response = await Axios.get(`http://localhost:8080/files/${pdfId}`, {
+        responseType: 'blob' // Expect a binary response
+      });
+      console.log(response);
+      const pdfBlobUrl = URL.createObjectURL(response.data); // Create a URL from the Blob
+      return new DocumentFile({
+        id: pdfId,
+        name: `Document-${pdfId}`, // Set an appropriate name
+        content: pdfBlobUrl // URL to be used by the PDF viewer
+      });
+    } catch (error) {
+      console.error("Error fetching PDF:", error);
+    }
+  };
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     // Create a FormData object to send the file
@@ -122,6 +139,28 @@ function PdfFileManager() {
       });
     }
   };  
+
+  useEffect(() => {
+    const handleDocumentUpdate = async (documentId) => {
+      // Add loading logic if necessary
+      const newDocument = await fetchPdfById(documentId);
+      if (newDocument) {
+        setUploadedPdfs(prevPdfs => {
+          // Avoid adding duplicate entries
+          const isExisting = prevPdfs.some(pdf => pdf.id === newDocument.id);
+          return isExisting ? prevPdfs : [...prevPdfs, newDocument];
+        });
+      }
+    };
+
+    subscribeToFiles(handleDocumentUpdate);
+
+    return () => {
+      unsubscribeFromFiles(handleDocumentUpdate);
+      // Cleanup Blob URLs if necessary
+      uploadedPdfs.forEach(pdf => URL.revokeObjectURL(pdf.content));
+    };
+  }, [uploadedPdfs]);
 
   return (
     <FileManagerContainer>
