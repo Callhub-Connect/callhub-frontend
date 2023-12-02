@@ -1,10 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import {
-  Alert,
-  Snackbar,
-} from "@mui/material";
 import PdfFileManager from "../../helper-components/pdf-manager-component/PdfManager";
 import { sendMessageWebsocket, disconnectWebsocket, subscribeToMessages, unsubscribeFromMessages, endSessionWebsocket, subscribeToEndSession, unsubscribeToEndSession } from "../../websocket";
 import { 
@@ -30,7 +26,6 @@ function Chat() {
   const storedMessages = JSON.parse(sessionStorage.getItem("chatMessages"));
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState(storedMessages || []);
-  const [alertOpen, setAlertOpen] = useState(false);
 
   const handleInputChange = (e) => {
     setInputMessage(e.target.value);
@@ -64,8 +59,6 @@ function Chat() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const sessionEnded = useCallback(() => {
     console.log("Session ended by other user")
-    setAlertOpen(true);
-    setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
     clearSessionAndNavigate();
   });
 
