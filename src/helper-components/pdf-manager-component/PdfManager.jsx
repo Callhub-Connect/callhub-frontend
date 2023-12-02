@@ -33,8 +33,21 @@ function PdfFileManager() {
 
   const openPdf = (event) => {
     const selectedPdfId = event.target.value;
-    const pdf = uploadedPdfs.find(pdf => pdf.id === selectedPdfId);
-    setSelectedPdf(pdf);
+  
+    // Check if the selected PDF is already open
+    if (selectedPdf && selectedPdf.id === selectedPdfId) {
+      // Reset the selected PDF to force a refresh
+      setSelectedPdf(null);
+  
+      // Use a timeout to ensure the state is cleared before setting it again
+      setTimeout(() => {
+        const pdf = uploadedPdfs.find(pdf => pdf.id === selectedPdfId);
+        setSelectedPdf(pdf);
+      }, 0);
+    } else {
+      const pdf = uploadedPdfs.find(pdf => pdf.id === selectedPdfId);
+      setSelectedPdf(pdf);
+    }
   };
 
   const fetchPdfById = async (pdfId) => {
@@ -50,7 +63,7 @@ function PdfFileManager() {
         content: pdfBlobUrl // URL to be used by the PDF viewer
       });
     } catch (error) {
-      console.error("Error fetching PDF:", error);
+      console.error("Error fetching file:", error);
     }
   };
   
@@ -122,8 +135,8 @@ function PdfFileManager() {
   
         Axios.put(`http://localhost:8080/files/update/${selectedPdf.id}`, formData)
         .then(response => {
-          console.log('PDF updated successfully:', response.data);
-          setAlertMessage("PDF changes saved successfully");
+          console.log('File updated successfully:', response.data);
+          setAlertMessage("File changes saved successfully");
           setAlertSeverity('success');
           setAlertOpen(true);
           setTimeout(() => setAlertOpen(false), 2000);
@@ -132,8 +145,8 @@ function PdfFileManager() {
           sendDocumentIdWebsocket(selectedPdf.id); // Example function to send data via WebSocket
         })
         .catch(error => {
-          console.error('PDF update failed:', error);
-          setAlertMessage("Error saving PDF changes");
+          console.error('File update failed:', error);
+          setAlertMessage("Error saving file changes");
           setAlertSeverity('error');
           setAlertOpen(true);
           setTimeout(() => setAlertOpen(false), 2000);
@@ -144,14 +157,24 @@ function PdfFileManager() {
 
   useEffect(() => {
     const handleDocumentUpdate = async (documentId) => {
-      // Add loading logic if necessary
       const newDocument = await fetchPdfById(documentId);
       if (newDocument) {
         setUploadedPdfs(prevPdfs => {
-          // Avoid adding duplicate entries
           const isExisting = prevPdfs.some(pdf => pdf.id === newDocument.id);
-          return isExisting ? prevPdfs : [...prevPdfs, newDocument];
+          if (isExisting) {
+            // Replace the existing entry with the updated one
+            return prevPdfs.map(pdf => pdf.id === newDocument.id ? newDocument : pdf);
+          } else {
+            return [...prevPdfs, newDocument];
+          }
         });
+    
+        if (newDocument.id === selectedPdf?.id) {
+          setSelectedPdf(newDocument);
+          // Create a mock event object
+          const mockEvent = { target: { value: newDocument.id } };
+          openPdf(mockEvent);
+        }
       }
     };
 
@@ -162,7 +185,7 @@ function PdfFileManager() {
       // Cleanup Blob URLs if necessary
       uploadedPdfs.forEach(pdf => URL.revokeObjectURL(pdf.content));
     };
-  }, [uploadedPdfs]);
+  }, [uploadedPdfs, selectedPdf]);
 
   return (
     <FileManagerContainer>
@@ -186,7 +209,7 @@ function PdfFileManager() {
           style={{ display: 'none' }} // Hide the actual file input
           ref={fileInputRef}
         />
-        <Button onClick={handleButtonClick}>Upload PDF</Button>
+        <Button onClick={handleButtonClick}>Upload</Button>
         <Button onClick={handleSave}>Save Changes</Button>
         <FormControl sx={{ width: "40%" }}>
         <InputLabel
