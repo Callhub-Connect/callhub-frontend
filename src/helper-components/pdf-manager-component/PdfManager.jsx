@@ -113,13 +113,12 @@ function PdfFileManager() {
   const handleSave = () => {
     if (pdfViewerInstance && selectedPdf) {
       pdfViewerInstance.exportPdf().then((blob) => {
-        console.log(blob); // Check what is being returned here
         if (!blob) {
           console.error('No data returned from exportPdf');
           return;
         }
         const formData = new FormData();
-        formData.append("file", blob, `updated_${selectedPdf.name}`); // Ensure blob is a Blob object
+        formData.append("file", blob, `updated_${selectedPdf.name}`);
   
         Axios.put(`http://localhost:8080/files/update/${selectedPdf.id}`, formData)
         .then(response => {
@@ -127,14 +126,17 @@ function PdfFileManager() {
           setAlertMessage("PDF changes saved successfully");
           setAlertSeverity('success');
           setAlertOpen(true);
-          setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
+          setTimeout(() => setAlertOpen(false), 2000);
+  
+          // Send the updated document ID via WebSocket
+          sendDocumentIdWebsocket(selectedPdf.id); // Example function to send data via WebSocket
         })
         .catch(error => {
           console.error('PDF update failed:', error);
           setAlertMessage("Error saving PDF changes");
           setAlertSeverity('error');
           setAlertOpen(true);
-          setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
+          setTimeout(() => setAlertOpen(false), 2000);
         });
       });
     }
