@@ -86,7 +86,7 @@ function clearSessionAndNavigate(){
     sessionStorage.removeItem("chatMessages");
     sessionStorage.removeItem("sessionId");
     sessionStorage.removeItem("sessionCode");
-    localStorage.setItem("isSessionActive", 'false');
+    localStorage.removeItem("isSessionActive");
     unsubscribeToEndSession(sessionEnded);
 
     disconnectWebsocket();
