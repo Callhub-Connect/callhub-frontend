@@ -16,7 +16,7 @@ import {
 
 function EndSession() {
     const emailRef = useRef();
-    const sessionCode = sessionStorage.getItem("sessionCode");
+    const sessionId = sessionStorage.getItem("sessionId");
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [open, setOpen] = useState(true);
@@ -28,8 +28,8 @@ function EndSession() {
         const templateId = "template_feo851p";
 
         // TODO: change to azure endpoint
-        let transcriptUrl = 'http://localhost:8080/email/transcript/' + sessionCode
-        let dateUrl = 'http://localhost:8080/email/date/' + sessionCode
+        let transcriptUrl = 'http://localhost:8080/email/transcript/' + sessionId
+        let dateUrl = 'http://localhost:8080/email/date/' + sessionId
 
         try {
             const response = await axios.get(transcriptUrl);
