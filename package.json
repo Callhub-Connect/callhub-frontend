@@ -29,7 +29,8 @@
     "start-pc": "set PORT=3000 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "pdf-install": "rm -rf public/pspdfkit-lib && cp -R ./node_modules/pspdfkit/dist/pspdfkit-lib public/pspdfkit-lib/"
   },
   "eslintConfig": {
     "extends": [
