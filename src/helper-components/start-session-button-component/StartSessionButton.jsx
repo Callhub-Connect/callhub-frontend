@@ -11,7 +11,7 @@ function StartSessionButton() {
     e.preventDefault();
 
     //TODO: replace with hosted address
-    axios.get("http://localhost:8080/session/new-session")
+    axios.get("https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/session/new-session")
       .then(function (response) {
         let sessionCode = response.data.sessionCode;
         sessionStorage.setItem('sessionCode', sessionCode);

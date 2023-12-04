@@ -28,8 +28,8 @@ function EndSession() {
         const templateId = "template_feo851p";
 
         // TODO: change to azure endpoint
-        let transcriptUrl = 'http://localhost:8080/email/transcript/' + sessionId
-        let dateUrl = 'http://localhost:8080/email/date/' + sessionId
+        let transcriptUrl = 'https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/email/transcript/' + sessionId
+        let dateUrl = 'https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/email/date/' + sessionId
 
         try {
             const response = await axios.get(transcriptUrl);
