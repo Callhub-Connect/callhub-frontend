@@ -19,6 +19,7 @@ function EndSession() {
     const sessionId = sessionStorage.getItem("sessionId");
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+    const [open, setOpen] = useState(true);
 
     useEffect(() => emailjs.init("OScF2lHq5ESl_o9lU"), []);
     const sendEmail = async (e) => {
@@ -53,16 +54,40 @@ function EndSession() {
             emailRef.current.value = "";
             // alert("Email successfully sent. Check inbox.");
             setSuccess(true);
-            setTimeout(() => setSuccess(false), 5000);
+            setTimeout(() => setSuccess(false), 2000);
         } catch (error) {
             // alert("Oops! Something went wrong while trying to send the email. Please make sure there are messages in the conversation before sending.");
             console.error('Error fetching transcript or sending email:', error.message);
             setError(true);
-            setTimeout(() => setError(false), 5000);
+            setTimeout(() => setError(false), 2000);
         }
     };
+
+    useEffect(() => {
+        // Set a timer to hide the Snackbar after 2 seconds
+        const timer = setTimeout(() => {
+            setOpen(false);
+        }, 2000);
+
+        // Cleanup the timer when the component is unmounted
+        return () => {
+            clearTimeout(timer);
+        };
+    }, []);
+
     return(
         <Container>
+            <Snackbar
+            open={open}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert 
+                    severity="info"
+                    sx={{ fontSize: '1.5rem' }}
+                >
+                    Session has been ended
+                </Alert>
+            </Snackbar>
             <Logo src="./img/callhubLogo-cropped.svg" alt="Callhub Logo" />
             <CodeContainer>
                 <Text>Your session has now ended.</Text>

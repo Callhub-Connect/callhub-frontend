@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import Axios from 'axios';
 import PdfViewerComponent from './PdfViewerComponent.jsx';
 import DocumentFile from '../../classes/Document.js';
@@ -16,7 +16,7 @@ import {
   PdfNavbar,
   Button,
 } from './PdfManager-styles';
-import { sendDocumentIdWebsocket } from '../../websocket';
+import { sendDocumentIdWebsocket, subscribeToFiles, unsubscribeFromFiles } from '../../websocket';
 
 function PdfFileManager() {
   const [uploadedPdfs, setUploadedPdfs] = useState([]);
@@ -31,12 +31,42 @@ function PdfFileManager() {
     fileInputRef.current.click();
   };
 
-  const openPdf = (event) => {
+  const openPdf = useCallback((event) => {
     const selectedPdfId = event.target.value;
-    const pdf = uploadedPdfs.find(pdf => pdf.id === selectedPdfId);
-    setSelectedPdf(pdf);
-  };
+  
+    // Check if the selected PDF is already open
+    if (selectedPdf && selectedPdf.id === selectedPdfId) {
+      // Reset the selected PDF to force a refresh
+      setSelectedPdf(null);
+  
+      // Use a timeout to ensure the state is cleared before setting it again
+      setTimeout(() => {
+        const pdf = uploadedPdfs.find(pdf => pdf.id === selectedPdfId);
+        setSelectedPdf(pdf);
+      }, 0);
+    } else {
+      const pdf = uploadedPdfs.find(pdf => pdf.id === selectedPdfId);
+      setSelectedPdf(pdf);
+    }
+  }, [uploadedPdfs, selectedPdf]);
 
+  const fetchPdfById = async (pdfId) => {
+    try {
+      const response = await Axios.get(`http://localhost:8080/files/${pdfId}`, {
+        responseType: 'blob' // Expect a binary response
+      });
+      console.log(response);
+      const pdfBlobUrl = URL.createObjectURL(response.data); // Create a URL from the Blob
+      return new DocumentFile({
+        id: pdfId,
+        name: `Document-${pdfId}`, // Set an appropriate name
+        content: pdfBlobUrl // URL to be used by the PDF viewer
+      });
+    } catch (error) {
+      console.error("Error fetching file:", error);
+    }
+  };
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     // Create a FormData object to send the file
@@ -96,32 +126,66 @@ function PdfFileManager() {
   const handleSave = () => {
     if (pdfViewerInstance && selectedPdf) {
       pdfViewerInstance.exportPdf().then((blob) => {
-        console.log(blob); // Check what is being returned here
         if (!blob) {
           console.error('No data returned from exportPdf');
           return;
         }
         const formData = new FormData();
-        formData.append("file", blob, `updated_${selectedPdf.name}`); // Ensure blob is a Blob object
+        formData.append("file", blob, `updated_${selectedPdf.name}`);
   
         Axios.put(`http://localhost:8080/files/update/${selectedPdf.id}`, formData)
         .then(response => {
-          console.log('PDF updated successfully:', response.data);
-          setAlertMessage("PDF changes saved successfully");
+          console.log('File updated successfully:', response.data);
+          setAlertMessage("File changes saved successfully");
           setAlertSeverity('success');
           setAlertOpen(true);
-          setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
+          setTimeout(() => setAlertOpen(false), 2000);
+  
+          // Send the updated document ID via WebSocket
+          sendDocumentIdWebsocket(selectedPdf.id); // Example function to send data via WebSocket
         })
         .catch(error => {
-          console.error('PDF update failed:', error);
-          setAlertMessage("Error saving PDF changes");
+          console.error('File update failed:', error);
+          setAlertMessage("Error saving file changes");
           setAlertSeverity('error');
           setAlertOpen(true);
-          setTimeout(() => setAlertOpen(false), 2000); // Close the alert after 2 seconds
+          setTimeout(() => setAlertOpen(false), 2000);
         });
       });
     }
   };  
+
+  useEffect(() => {
+    const handleDocumentUpdate = async (documentId) => {
+      const newDocument = await fetchPdfById(documentId);
+      if (newDocument) {
+        setUploadedPdfs(prevPdfs => {
+          const isExisting = prevPdfs.some(pdf => pdf.id === newDocument.id);
+          if (isExisting) {
+            // Replace the existing entry with the updated one
+            return prevPdfs.map(pdf => pdf.id === newDocument.id ? newDocument : pdf);
+          } else {
+            return [...prevPdfs, newDocument];
+          }
+        });
+    
+        if (newDocument.id === selectedPdf?.id) {
+          setSelectedPdf(newDocument);
+          // Create a mock event object
+          const mockEvent = { target: { value: newDocument.id } };
+          openPdf(mockEvent);
+        }
+      }
+    };
+
+    subscribeToFiles(handleDocumentUpdate);
+
+    return () => {
+      unsubscribeFromFiles(handleDocumentUpdate);
+      // Cleanup Blob URLs if necessary
+      uploadedPdfs.forEach(pdf => URL.revokeObjectURL(pdf.content));
+    };
+  }, [uploadedPdfs, selectedPdf, openPdf]);
 
   return (
     <FileManagerContainer>
@@ -145,7 +209,7 @@ function PdfFileManager() {
           style={{ display: 'none' }} // Hide the actual file input
           ref={fileInputRef}
         />
-        <Button onClick={handleButtonClick}>Upload PDF</Button>
+        <Button onClick={handleButtonClick}>Upload</Button>
         <Button onClick={handleSave}>Save Changes</Button>
         <FormControl sx={{ width: "40%" }}>
         <InputLabel

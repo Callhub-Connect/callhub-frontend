@@ -11,6 +11,7 @@ var sessionId;
 // Create an observable instance
 const messageObservable = new Observable();
 const endSessionObservable = new Observable();
+const documentObservable = new Observable();
 
 export function connectWebsocket(userRole, sessionID) {
   role = userRole;
@@ -26,8 +27,8 @@ export function connectWebsocket(userRole, sessionID) {
       });
 
       client.subscribe(`/topic/document-${role}/${sessionId}`, (documentid) => {
-        // TODO: Notify observers when a new document arrives
         console.log(documentid.body);
+        documentObservable.notifyObservers(documentid.body);
       });
 
       // subscribe to end session notifications
@@ -95,4 +96,12 @@ export function subscribeToEndSession(callback) {
 
 export function unsubscribeToEndSession(callback) {
   endSessionObservable.removeObserver(callback);
+}
+
+export function subscribeToFiles(callback) {
+  documentObservable.addObserver(callback);
+}
+
+export function unsubscribeFromFiles(callback) {
+  documentObservable.removeObserver(callback);
 }
