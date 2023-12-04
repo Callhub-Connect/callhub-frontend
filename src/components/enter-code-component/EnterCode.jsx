@@ -58,7 +58,7 @@ function EnterCode() {
             <CodeContainer>
                 <Text>Enter your session code</Text>
                 <InputSection>
-                    <Input placeholder="ex. abcd123" 
+                    <Input placeholder="ex. ABCDEF" 
                         onKeyPress={handleKeyPress} onChange={handleInputChange}/>
                     <Button onClick={joinSession}>Connect</Button>
                 </InputSection>
