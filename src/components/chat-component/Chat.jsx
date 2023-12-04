@@ -63,7 +63,7 @@ function Chat() {
   });
 
   function notifyEndSession(){
-    let url = "http://localhost:8080/session/end-session/" + sessionStorage.getItem('sessionCode');
+    let url = "https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/session/end-session/" + sessionStorage.getItem('sessionCode');
     axios.get(url)
       .then(function (response) {
         console.log(response.data);

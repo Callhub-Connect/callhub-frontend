@@ -52,7 +52,7 @@ function PdfFileManager() {
 
   const fetchPdfById = async (pdfId) => {
     try {
-      const response = await Axios.get(`http://localhost:8080/files/${pdfId}`, {
+      const response = await Axios.get(`https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/files/${pdfId}`, {
         responseType: 'blob' // Expect a binary response
       });
       console.log(response);
@@ -78,7 +78,7 @@ function PdfFileManager() {
     formData.append("session", sessionCode); 
 
     // Send the file to the backend
-    Axios.post('http://localhost:8080/files/session_add_pdf', formData)
+    Axios.post('https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/files/session_add_pdf', formData)
       .then((response) => {
         // File uploaded successfully
         console.log('File uploaded successfully:', response.data);
@@ -114,7 +114,7 @@ function PdfFileManager() {
     if (selectedPdf) {
         return (
           <PdfViewerComponent
-            document={`http://localhost:8080/files/${selectedPdf.id}`}
+            document={`https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/files/${selectedPdf.id}`}
             onInstanceChange={instance => setPdfViewerInstance(instance)}
           />
         );
@@ -133,7 +133,7 @@ function PdfFileManager() {
         const formData = new FormData();
         formData.append("file", blob, `updated_${selectedPdf.name}`);
   
-        Axios.put(`http://localhost:8080/files/update/${selectedPdf.id}`, formData)
+        Axios.put(`https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/files/update/${selectedPdf.id}`, formData)
         .then(response => {
           console.log('File updated successfully:', response.data);
           setAlertMessage("File changes saved successfully");
