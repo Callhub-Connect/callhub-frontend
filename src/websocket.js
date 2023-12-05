@@ -18,7 +18,7 @@ export function connectWebsocket(userRole, sessionID) {
   sessionId = sessionID;
 
   client = new Client({
-    brokerURL: "wss://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/callhub",
+    brokerURL: "ws://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/callhub",
     onConnect: () => {
       // subscribe to messages
       client.subscribe(`/topic/message-${role}/${sessionId}`, (message) => {
