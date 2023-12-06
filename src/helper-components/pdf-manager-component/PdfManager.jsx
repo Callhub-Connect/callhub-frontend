@@ -211,7 +211,7 @@ function PdfFileManager() {
           ref={fileInputRef}
         />
         <Button onClick={handleButtonClick}>Upload</Button>
-        <Button onClick={handleSave}>Save Changes</Button>
+        <Button onClick={handleSave}>Save</Button>
         <FormControl sx={{ width: "40%" }}>
         <InputLabel
           id="pdf-select-label"
