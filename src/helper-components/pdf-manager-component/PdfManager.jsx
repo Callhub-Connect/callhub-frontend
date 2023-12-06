@@ -56,10 +56,11 @@ function PdfFileManager() {
         responseType: 'blob' // Expect a binary response
       });
       console.log(response);
+      const newName =  await Axios.get(`https://connect.greenplant-1b2a73a7.eastus.azurecontainerapps.io/files/name/${pdfId}`);
       const pdfBlobUrl = URL.createObjectURL(response.data); // Create a URL from the Blob
       return new DocumentFile({
         id: pdfId,
-        name: `Document-${pdfId}`, // Set an appropriate name
+        name: newName.data, // Set an appropriate name
         content: pdfBlobUrl // URL to be used by the PDF viewer
       });
     } catch (error) {
